@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Projets
+from .models import Projets, Taches
 
 def liste_projets(request):
     projets = Projets.objects.all()
@@ -7,4 +7,5 @@ def liste_projets(request):
 
 def detail_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
-    return render(request, 'detail_projet.html', {'projet': projet})
+    taches = Taches.objects.filter(projet_id = projet.id_projet)
+    return render(request, 'detail_projet.html', {'projet': projet, "taches": taches})

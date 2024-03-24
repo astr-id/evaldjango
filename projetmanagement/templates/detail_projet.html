@@ -11,7 +11,7 @@
 
     <h2>Liste des tâches :</h2>
     <ul>
-        {% for tache in projet.taches_projet.all %}
+      {% for tache in taches %}
             <li>{{ tache.libelle }}</li>
         {% endfor %}
     </ul>
