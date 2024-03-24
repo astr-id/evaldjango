@@ -28,8 +28,8 @@ class Projets(models.Model):
         ('Livré', 'Livré'),
     )
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES)
-    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
-    date = models.ForeignKey(Dates, on_delete=models.CASCADE)
+    responsable = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True)
+    date = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
 
 class Taches(models.Model):
     id_tache = models.IntegerField(primary_key=True)
@@ -53,5 +53,5 @@ class Taches(models.Model):
     )
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES)
     tache_parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    date = models.ForeignKey(Dates, on_delete=models.CASCADE)
+    date = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
     projet = models.ForeignKey(Projets, on_delete=models.CASCADE)
