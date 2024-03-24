@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du projet</title>
+</head>
+<body>
+    <h1>Détails du projet : {{ projet.nom }}</h1>
+    <p>Avancement : {{ projet.avancement }}</p>
+    <p>Statut : {{ projet.statut }}</p>
+
+    <h2>Liste des tâches :</h2>
+    <ul>
+        {% for tache in projet.taches_projet.all %}
+            <li>{{ tache.libelle }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
