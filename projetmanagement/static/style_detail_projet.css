@@ -1,0 +1,70 @@
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px;
+    border: none;
+}
+
+th, td {
+    width: 20%;
+    border: none;
+    padding: 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #00bfbf;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 5px;
+}
+
+.statut {
+    background-color: #f4f5f7;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+p, h3 {
+    margin: 5px;
+}
+
+
+ul {
+    padding: 0px;
+}
+
+.tache {
+    list-style: none;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background-color: #fafafa;
+    border-color: #999;
+}
+
+.tache::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    right: 14px;
+}
+
+.priorite-basse::before {
+    content: "🟢";
+}
+
+.priorite-moyenne::before {
+    content: "🟡️";
+}
+
+.priorite-haute::before {
+    content: "🔴";
+}
+
+.detail-projet p {
+    margin-left: 30px;
+}

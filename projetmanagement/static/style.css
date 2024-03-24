@@ -1,0 +1,48 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #026aa7;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 20px;
+}
+
+.logout-icon {
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logout-icon:hover, .back-icon:hover {
+    transform: scale(1.2);
+}
+
+h2 {
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+
+.retour {
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+.back-icon {
+    margin-left: 30px;
+    font-size: medium;
+    transition: transform 0.3s ease;
+    margin: 5px;
+}

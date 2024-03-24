@@ -1,15 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Liste des projets</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style_projets.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <h1>Liste des projets</h1>
-    <ul>
-        {% for projet in projets %}
-            <li><a href="{% url 'detail_projet' projet.id_projet %}">{{ projet.nom }}</a></li>
-        {% endfor %}
-    </ul>
+{% include 'header.html' %}
+{% for status, projets_list in projets.items %}
+    {% if projets_list %}
+        <h2 class="projets-title">Projet {{ status }}</h2>
+        <ul class="projets">
+            {% for projet in projets_list %}
+                <li class="projet {{ status }}">
+                    <h3>{{ projet.nom }}</h3>
+                    <p>Avancement : {{ projet.avancement }}</p>
+                    <a href="{% url 'detail_projet' projet.id_projet %}">Voir plus</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endfor %}
 </body>
 </html>

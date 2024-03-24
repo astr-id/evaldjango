@@ -1,19 +1,55 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Détails du projet</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style_detail_projet.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <h1>Détails du projet : {{ projet.nom }}</h1>
+{% include 'header.html' %}
+<div class="retour">
+    <a href="{% url 'liste_projets' %}">
+        <i class="fas fa-chevron-left back-icon" title="Retour"></i>
+    </a>
+</div>
+<h2>
+    {{ projet.nom }}
+</h2>
+<div class="detail-projet">
     <p>Avancement : {{ projet.avancement }}</p>
     <p>Statut : {{ projet.statut }}</p>
-
-    <h2>Liste des tâches :</h2>
-    <ul>
-      {% for tache in taches %}
-            <li>{{ tache.libelle }}</li>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>Planifiée</th>
+        <th>En cours</th>
+        <th>Réalisée</th>
+        <th>En pause</th>
+        <th>Validée</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        {% for statut, taches in taches_par_statut.items %}
+            <td class="statut {{ statut }}">
+                <ul>
+                    {% for tache in taches %}
+                        <li class="tache {% if tache.priorite == 1 %}priorite-basse{% elif tache.priorite == 2 %}priorite-moyenne{% else %}priorite-haute{% endif %}">
+                            <h3>{{ tache.libelle }}</h3>
+                            <p><strong>Description : </strong> {{ tache.description }}</p>
+                            <p><strong>Durée : </strong>{{ tache.duree }} jours</p>
+                            <p><strong>Avancement :</strong> {{ tache.avancement }} %</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </td>
         {% endfor %}
-    </ul>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

@@ -1,0 +1,45 @@
+ul {
+    display: flex;
+    list-style: none;
+    padding-left: 20px;
+}
+
+.projets {
+    display: flex;
+}
+
+.projet {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 10px;
+    padding: 10px;
+    width: 300px;
+}
+
+.projet h3 {
+    margin-top: 0;
+}
+
+.projet p {
+    margin-bottom: 10px;
+}
+
+.projet.cours {
+    background-color: #f0f8ff;
+    border-color: #007bff;
+}
+
+.projet.planifié {
+    background-color: #fafafa;
+    border-color: #999;
+}
+
+.projet.pause {
+    background-color: #fffacd;
+    border-color: #ffa500;
+}
+
+.projet.livrés {
+    background-color: #cfc;
+    border-color: #28a745;
+}
