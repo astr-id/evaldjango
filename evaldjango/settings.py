@@ -122,3 +122,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Redirect links
+LOGIN_REDIRECT_URL = "/projetmanagement/projets"
+LOGOUT_REDIRECT_URL = "/"
