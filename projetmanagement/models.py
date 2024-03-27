@@ -13,6 +13,7 @@ class Utilisateur(models.Model):
     prenom = models.CharField(max_length=50)
 
 
+
 class Dates(models.Model):
     id_date = models.IntegerField(primary_key=True)
     debut = models.DateField()
@@ -33,6 +34,7 @@ class Projets(models.Model):
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES)
     responsable = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True)
     date = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
+
 
 
 class Taches(models.Model):

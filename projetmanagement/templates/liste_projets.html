@@ -10,13 +10,25 @@
 </head>
 <body>
 {% include 'header.html' %}
+
+<h2>Créer un nouveau projet</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="text" name="nom_projet" placeholder="Nom du projet" required>
+    <button type="submit">Créer nouveau projet</button>
+</form>
+
 {% for status, projets_list in projets.items %}
     {% if projets_list %}
-        <h2 class="projets-title">Projet {{ status }}</h2>
+        <h2 class="projets-title">Projets {{ status }}</h2>
         <ul class="projets">
             {% for projet in projets_list %}
                 <li class="projet {{ status }}">
                     <h3>{{ projet.nom }}</h3>
+                    <form action="{% url 'supprimer_projet' projet.id_projet %}" method="post">
+                        {% csrf_token %}
+                         <button type="submit"><i class="fas fa-trash-alt"></i></button>
+                    </form>
                     <p>Avancement : {{ projet.avancement }}</p>
                     <a href="{% url 'detail_projet' projet.id_projet %}">Voir plus</a>
                 </li>

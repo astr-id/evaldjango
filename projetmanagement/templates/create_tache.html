@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Créer une nouvelle tâche</title>
+    <!-- Incluez vos fichiers CSS et autres scripts nécessaires ici -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script>
+        $(function () {
+            // Initialisez Datepicker pour les champs de date de début et de fin
+            $("#id_date_debut").datepicker();
+            $("#id_date_fin").datepicker();
+        });
+    </script>
+</head>
+<body>
+<h1>Créer une nouvelle tâche</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="libelle">Libellé:</label><br>
+    <input type="text" id="libelle" name="libelle"><br>
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description"></textarea><br>
+    <label for="priorite">Priorité:</label><br>
+    <select id="priorite" name="priorite">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select><br>
+    <label for="date_debut">Date de début:</label><br>
+    <input type="date" id="date_debut" name="date_debut"><br>
+    <label for="date_fin">Date de fin:</label><br>
+    <input type="date" id="date_fin" name="date_fin"><br>
+    <input type="checkbox" id="super_tache" name="super_tache">
+    <label for="super_tache">Super Tâche</label><br>
+    <button type="submit">Créer</button>
+</form>
+</body>
+</html>

@@ -22,6 +22,7 @@
     <p>Avancement : {{ projet.avancement }}</p>
     <p>Statut : {{ projet.statut }}</p>
 </div>
+  <a href="{% url 'creer_tache' projet_id=projet.id_projet %}">Créer une nouvelle tâche</a>
 <table>
     <thead>
     <tr>
