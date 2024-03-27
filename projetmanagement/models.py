@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User, Group
 
 class Utilisateur(models.Model):
     id_utilisateur = models.IntegerField(primary_key=True)
@@ -31,7 +31,7 @@ class Projets(models.Model):
         ('Livré', 'Livré'),
     )
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES)
-    responsable = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True)
+    responsable = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
 
 
@@ -56,6 +56,7 @@ class Taches(models.Model):
         ('Validée', 'Validée'),
     )
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES)
+    #gestionnaire = models.ForeignKey(Group.objects.get(name='Gestionnaire'), on_delete=models.CASCADE)
     tache_parent = models.ForeignKey('self', null=True, blank=True, related_name='sous_taches',
                                      on_delete=models.CASCADE)
     date = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
