@@ -22,7 +22,7 @@
     <p>Avancement : {{ projet.avancement }}</p>
     <p>Statut : {{ projet.statut }}</p>
 </div>
-  <a href="{% url 'creer_tache' projet_id=projet.id_projet %}">Créer une nouvelle tâche</a>
+<a href="{% url 'creer_tache' projet_id=projet.id_projet %}">Créer une nouvelle tâche</a>
 <table>
     <thead>
     <tr>
@@ -41,9 +41,37 @@
                     {% for tache in taches %}
                         <li class="tache {% if tache.priorite == 1 %}priorite-basse{% elif tache.priorite == 2 %}priorite-moyenne{% else %}priorite-haute{% endif %}">
                             <h3>{{ tache.libelle }}</h3>
+                            <form method="post" action="{% url 'supprimer_tache' tache_id=tache.id_tache %}">
+                                {% csrf_token %}
+                                 <button type="submit"><i class="fas fa-trash-alt"></i></button>
+                            </form>
+                            {% if tache.tache_parent %}
+                                <p><strong>Tâche parente : </strong> {{ tache.tache_parent.libelle }}</p>
+                            {% endif %}
                             <p><strong>Description : </strong> {{ tache.description }}</p>
                             <p><strong>Durée : </strong>{{ tache.duree }} jours</p>
                             <p><strong>Avancement :</strong> {{ tache.avancement }} %</p>
+                            <form method="post" action="{% url 'modifier_avancement_tache' tache_id=tache.id_tache %}">
+                                {% csrf_token %}
+                                <label for="avancement">Modifier l'avancement :</label>
+                                <input type="number" name="avancement" min="0" max="100" required>
+                                <input type="submit" value="Modifier">
+                            </form>
+                            <form method="post" action="{% url 'modifier_statut_tache' tache_id=tache.id_tache %}">
+                                {% csrf_token %}
+                                <label for="statut">Modifier le statut :</label>
+                                <select name="statut">
+                                    <option value="Planifiée">Planifiée</option>
+                                    <option value="En cours">En cours</option>
+                                    <option value="Réalisée">Réalisée</option>
+                                    <option value="En pause">En pause</option>
+                                    <option value="Validée">Validée</option>
+                                </select>
+                                <input type="submit" value="Modifier">
+                            </form>
+                            {% if tache.niveau_profondeur == 1 or tache.niveau_profondeur == 2 %}
+                                <a href="{% url 'creer_sous_tache' tache_id=tache.id_tache %}">Ajouter sous-tâche</a>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>

@@ -1,21 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Créer une nouvelle tâche</title>
-    <!-- Incluez vos fichiers CSS et autres scripts nécessaires ici -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script>
-        $(function () {
-            // Initialisez Datepicker pour les champs de date de début et de fin
-            $("#id_date_debut").datepicker();
-            $("#id_date_fin").datepicker();
-        });
-    </script>
+    <link rel="stylesheet" type="text/css" href="{% static 'style_formulaire_tache.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
+{% include 'header.html' %}
 <h1>Créer une nouvelle tâche</h1>
 <form method="post">
     {% csrf_token %}
@@ -33,8 +27,10 @@
     <input type="date" id="date_debut" name="date_debut"><br>
     <label for="date_fin">Date de fin:</label><br>
     <input type="date" id="date_fin" name="date_fin"><br>
-    <input type="checkbox" id="super_tache" name="super_tache">
-    <label for="super_tache">Super Tâche</label><br>
+    {% if not sous_tache %}
+        <input type="checkbox" id="super_tache" name="super_tache">
+        <label for="super_tache">Super Tâche</label><br>
+    {% endif %}
     <button type="submit">Créer</button>
 </form>
 </body>
