@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Créer une nouvelle tâche</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'style_formulaire_tache.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style_formulaire_tache.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
@@ -13,25 +13,33 @@
 <h1>Créer une nouvelle tâche</h1>
 <form method="post">
     {% csrf_token %}
-    <label for="libelle">Libellé:</label><br>
-    <input type="text" id="libelle" name="libelle"><br>
-    <label for="description">Description:</label><br>
-    <textarea id="description" name="description"></textarea><br>
-    <label for="priorite">Priorité:</label><br>
+    <label for="libelle">Libellé:</label>
+    <input type="text" id="libelle" name="libelle">
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea>
+    <label for="priorite">Priorité:</label>
     <select id="priorite" name="priorite">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
-    </select><br>
-    <label for="date_debut">Date de début:</label><br>
-    <input type="date" id="date_debut" name="date_debut"><br>
-    <label for="date_fin">Date de fin:</label><br>
-    <input type="date" id="date_fin" name="date_fin"><br>
+    </select>
+    <label for="date_debut">Date de début:</label>
+    <input type="date" id="date_debut" name="date_debut">
+    <label for="date_fin">Date de fin:</label>
+    <input type="date" id="date_fin" name="date_fin">
     {% if not sous_tache %}
-        <input type="checkbox" id="super_tache" name="super_tache">
-        <label for="super_tache">Super Tâche</label><br>
+        <div class="inline-checkbox">
+            <input type="checkbox" id="super_tache" name="super_tache">
+            <label for="super_tache">Tâche parente</label>
+        </div>
     {% endif %}
-    <button type="submit">Créer</button>
+    <div class="in-line">
+        <button class="btn creer-btn" type="submit"><i class="fas fa-plus"> </i>  Créer</button>
+        <button class="btn annuler-btn" type="button" onclick="window.history.back()">
+            <i class="fas fa-times"></i>
+              Annuler
+        </button>
+    </div>
 </form>
 </body>
 </html>

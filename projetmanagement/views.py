@@ -74,7 +74,7 @@ def creer_tache(request, projet_id):
 
 def creer_sous_tache(request, tache_id):
     tache_parente = get_object_or_404(Taches, pk=tache_id)
-    sous_tache = True  # Vous créez une sous-tâche
+    sous_tache = True
     if request.method == 'POST':
         libelle = request.POST.get('libelle')
         description = request.POST.get('description')
@@ -130,7 +130,11 @@ def modifier_avancement_tache(request, tache_id):
         nouvel_avancement = request.POST.get('avancement')
         if nouvel_avancement.isdigit() and 0 <= int(nouvel_avancement) <= 100:
             tache.avancement = int(nouvel_avancement)
+            if tache.avancement == 100:
+                tache.statut = 'Validée'
             tache.save()
+            tache.projet.calculer_avancement_moyen()
+            tache.projet.verifier_statut_projet()
             return redirect('detail_projet', projet_id=tache.projet_id)
     return HttpResponseBadRequest("Invalid request")
 
@@ -141,6 +145,10 @@ def modifier_statut_tache(request, tache_id):
         nouveau_statut = request.POST.get('statut')
         if nouveau_statut in ['Planifiée', 'En cours', 'Réalisée', 'En pause', 'Validée']:
             tache.statut = nouveau_statut
+            if tache.avancement == 100:
+                tache.statut = 'Réalisée'
             tache.save()
+            tache.projet.calculer_avancement_moyen()
+            tache.projet.verifier_statut_projet()
             return redirect('detail_projet', projet_id=tache.projet_id)
     return HttpResponseBadRequest("Invalid request")
