@@ -10,18 +10,24 @@
 </head>
 <body>
 {% include 'header.html' %}
-<div class="retour">
-    <a href="{% url 'liste_projets' %}">
-        <i class="fas fa-chevron-left back-icon" title="Retour"></i>
-    </a>
+
+
+<div class="in-line">
+    <div class="in-line retour">
+        <a href="{% url 'liste_projets' %}">
+            <i class="fas fa-chevron-left back-icon" title="Retour"></i>
+        </a>
+        <h2>
+            {{ projet.nom }}
+        </h2>
+    </div>
+    <button class="btn creer-btn">
+        <a href="{% url 'creer_tache' projet_id=projet.id_projet %}">
+            <i class="fas fa-plus"></i> Créer une nouvelle tâche
+        </a>
+    </button>
 </div>
-<h2>
-    {{ projet.nom }}
-</h2>
-<div class="detail-projet">
-    <p>Avancement : {{ projet.avancement }}</p>
-    <p>Statut : {{ projet.statut }}</p>
-</div>
+
 <table>
     <thead>
     <tr>
@@ -38,11 +44,55 @@
             <td class="statut {{ statut }}">
                 <ul>
                     {% for tache in taches %}
-                        <li class="tache {% if tache.priorite == 1 %}priorite-basse{% elif tache.priorite == 2 %}priorite-moyenne{% else %}priorite-haute{% endif %}">
-                            <h3>{{ tache.libelle }}</h3>
+                        <li class="tache">
+
+                            <div class="in-line">
+                                <h3>{{ tache.libelle }}</h3>
+                                <form method="post" action="{% url 'supprimer_tache' tache_id=tache.id_tache %}">
+                                    {% csrf_token %}
+                                    <button type="submit"><i class="fas fa-trash-alt trash-icon"></i></button>
+                                </form>
+                            </div>
+
+                            {% if tache.tache_parent %}
+                                <p><strong>Tâche parente : </strong> {{ tache.tache_parent.libelle }}</p>
+                            {% endif %}
+
+                            <p><strong>Priorité : </strong>{% if tache.priorite == 1 %}Basse
+                                🟢{% elif tache.priorite == 2 %}Moyenne 🟡{% else %}Élevée 🔴{% endif %}</p>
                             <p><strong>Description : </strong> {{ tache.description }}</p>
                             <p><strong>Durée : </strong>{{ tache.duree }} jours</p>
                             <p><strong>Avancement :</strong> {{ tache.avancement }} %</p>
+
+                            <form method="post" action="{% url 'modifier_avancement_tache' tache_id=tache.id_tache %}">
+                                {% csrf_token %}
+                                <input type="number" name="avancement" min="0" max="100" required>
+                                <button type="submit" class="btn modifier-btn">
+                                    <i class="fas fa-pen" style="margin-right: 0px" ;></i>
+                                </button>
+                            </form>
+
+                            <form method="post" action="{% url 'modifier_statut_tache' tache_id=tache.id_tache %}">
+                                {% csrf_token %}
+                                <label for="statut"><strong>Statut :</strong></label>
+                                <select name="statut">
+                                    <option value="Planifiée">Planifiée</option>
+                                    <option value="En cours">En cours</option>
+                                    <option value="Réalisée">Réalisée</option>
+                                    <option value="En pause">En pause</option>
+                                    <option value="Validée">Validée</option>
+                                </select>
+                                <button type="submit" class="btn modifier-btn">
+                                    <i class="fas fa-pen" style="margin-right: 0px" ;></i>
+                                </button>
+                            </form>
+
+                            {% if tache.niveau_profondeur == 0 or tache.niveau_profondeur == 1 %}
+                                <button class="btn creer-btn">
+                                    <a href="{% url 'creer_sous_tache' tache_id=tache.id_tache %}">
+                                        <i class="fas fa-plus"></i> Ajouter sous-tâche</a>
+                                </button>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>

@@ -43,3 +43,31 @@ ul {
     background-color: #cfc;
     border-color: #28a745;
 }
+
+.projet.cours:hover {
+    background-color: #c0dbf3;
+    border-color: #0271e8;
+}
+
+.projet.planifié:hover {
+    background-color: #838383;
+    border-color: #7a7a7a;
+}
+
+.projet.pause:hover {
+    background-color: #f6eea7;
+    border-color: #e79501;
+}
+
+.projet.livrés:hover {
+    background-color: #acf8ac;
+    border-color: #218638;
+}
+
+
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 30px 0px 0px 30px;
+}

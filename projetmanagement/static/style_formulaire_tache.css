@@ -1,0 +1,42 @@
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+
+form {
+    max-width: 400px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+}
+
+textarea {
+    height: 100px;
+}
+
+
+.inline-checkbox {
+    display: flex;
+    align-content: flex-end;
+}
+
+#super_tache {
+    width: 10px;
+}
+
+button {
+    font-size: medium;
+}
