@@ -11,12 +11,14 @@
 <body>
 {% include 'header.html' %}
 
+<!-- Si l'utilisateur est Responsable, il aura accès à ce formulaire -->
+{% if user.estResponsable == True %}
 <form action="" method="post">
     {% csrf_token %}
     <input type="text" name="nom_projet" placeholder="Nom du projet" required>
     <button class="btn creer-btn" type="submit"><i class="fas fa-plus"></i> Créer nouveau projet</button>
 </form>
-
+{% endif %}
 
 {% for status, projets_list in projets.items %}
     {% if projets_list %}
@@ -27,10 +29,13 @@
                     <li class="projet {{ status }}">
                         <div class="in-line">
                             <h3>{{ projet.nom }}</h3>
+                            <!-- Si l'utilisateur est Responsable, il pourra supprimer le projet -->
+                            {% if user.estResponsable == True %}
                             <form action="{% url 'supprimer_projet' projet.id_projet %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit"><i class="fas fa-trash-alt trash-icon"></i></button>
                             </form>
+                            {% endif %}
                         </div>
                         <p><strong>Responsable : </strong>{{ projet.responsable.nom }} {{ projet.responsable.prenom }}
                         </p>
