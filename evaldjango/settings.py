@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'projetmanagement',
 ]
 
@@ -126,6 +125,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Redirect links
 LOGIN_REDIRECT_URL = "liste_projets"
-LOGOUT_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "login"
 
 AUTH_USER_MODEL='projetmanagement.Utilisateur'
