@@ -1,4 +1,21 @@
 <header>
+    {% block content %}
+        Bonjour {{ user.username }} !
+        <!-- Check le groupe d'appartenance da personne loguée -->
+        {% if user.estResponsable == True %}
+            Responsable
+        {% elif user.estGestionnaire == True %}
+            Gestionnaire
+        {% else %}
+            Employe
+            <!-- Block else à supprimer, pour tests seulement -->
+        {% endif %}
         <h1>🎯 Projet Management</h1>
-        <i class="fas fa-sign-out-alt logout-icon" title="Déconnexion"></i>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">
+                <i class="fas fa-sign-out-alt logout-icon" title="Déconnexion"></i>
+            </button>
+        </form>
+    {% endblock %}
 </header>

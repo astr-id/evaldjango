@@ -18,9 +18,15 @@ header {
     height: 20px;
 }
 
+.logout-button{
+    background: none;
+    border: none;
+    padding: 0;
+}
+
 .logout-icon {
     color: #fff;
-    font-size: 15px;
+    font-size: 22px;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
