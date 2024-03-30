@@ -45,6 +45,7 @@
                 <ul>
                     {% for tache in taches %}
                         <li class="tache">
+
                             <div class="in-line">
                                 <h3>{{ tache.libelle }}</h3>
                                 <form method="post" action="{% url 'supprimer_tache' tache_id=tache.id_tache %}">
@@ -52,14 +53,17 @@
                                     <button type="submit"><i class="fas fa-trash-alt trash-icon"></i></button>
                                 </form>
                             </div>
+
                             {% if tache.tache_parent %}
                                 <p><strong>Tâche parente : </strong> {{ tache.tache_parent.libelle }}</p>
                             {% endif %}
+
                             <p><strong>Priorité : </strong>{% if tache.priorite == 1 %}Basse
                                 🟢{% elif tache.priorite == 2 %}Moyenne 🟡{% else %}Élevée 🔴{% endif %}</p>
                             <p><strong>Description : </strong> {{ tache.description }}</p>
                             <p><strong>Durée : </strong>{{ tache.duree }} jours</p>
                             <p><strong>Avancement :</strong> {{ tache.avancement }} %</p>
+
                             <form method="post" action="{% url 'modifier_avancement_tache' tache_id=tache.id_tache %}">
                                 {% csrf_token %}
                                 <input type="number" name="avancement" min="0" max="100" required>
@@ -82,7 +86,8 @@
                                     <i class="fas fa-pen" style="margin-right: 0px" ;></i>
                                 </button>
                             </form>
-                            {% if tache.niveau_profondeur == 1 or tache.niveau_profondeur == 2 %}
+
+                            {% if tache.niveau_profondeur == 0 or tache.niveau_profondeur == 1 %}
                                 <button class="btn creer-btn">
                                     <a href="{% url 'creer_sous_tache' tache_id=tache.id_tache %}">
                                         <i class="fas fa-plus"></i> Ajouter sous-tâche</a>

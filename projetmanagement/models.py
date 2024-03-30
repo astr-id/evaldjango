@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 
 class Utilisateur(models.Model):
     id_utilisateur = models.IntegerField(primary_key=True)
@@ -32,7 +32,8 @@ class Projets(models.Model):
     )
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES)
     responsable = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True)
-    date = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
+    date_debut = models.DateField()
+    date_fin = models.DateField()
 
     def calculer_avancement_moyen(self):
         taches_projet = self.taches_set.all()
@@ -44,11 +45,14 @@ class Projets(models.Model):
         else:
             self.avancement = 0
             self.save()
+
     def verifier_statut_projet(self):
-        toutes_taches_terminees = self.taches_set.filter(statut__in=['Réalisée', 'Validée']).count() == self.taches_set.count()
+        toutes_taches_terminees = self.taches_set.filter(
+            statut__in=['Réalisée', 'Validée']).count() == self.taches_set.count()
         if toutes_taches_terminees:
             self.statut = 'Livré'
             self.save()
+
 
 class Taches(models.Model):
     id_tache = models.AutoField(primary_key=True)
@@ -73,7 +77,8 @@ class Taches(models.Model):
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES, default='Planifiée')
     tache_parent = models.ForeignKey('self', null=True, blank=True, related_name='sous_taches',
                                      on_delete=models.CASCADE)
-    date = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
+    date_debut = models.DateField()
+    date_fin = models.DateField()
     projet = models.ForeignKey(Projets, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):

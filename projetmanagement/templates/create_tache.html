@@ -11,6 +11,11 @@
 <body>
 {% include 'header.html' %}
 <h1>Créer une nouvelle tâche</h1>
+{% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+{% endif %}
 <form method="post">
     {% csrf_token %}
     <label for="libelle">Libellé:</label>
@@ -27,17 +32,11 @@
     <input type="date" id="date_debut" name="date_debut">
     <label for="date_fin">Date de fin:</label>
     <input type="date" id="date_fin" name="date_fin">
-    {% if not sous_tache %}
-        <div class="inline-checkbox">
-            <input type="checkbox" id="super_tache" name="super_tache">
-            <label for="super_tache">Tâche parente</label>
-        </div>
-    {% endif %}
     <div class="in-line">
-        <button class="btn creer-btn" type="submit"><i class="fas fa-plus"> </i>  Créer</button>
+        <button class="btn creer-btn" type="submit"><i class="fas fa-plus"> </i> Créer</button>
         <button class="btn annuler-btn" type="button" onclick="window.history.back()">
             <i class="fas fa-times"></i>
-              Annuler
+            Annuler
         </button>
     </div>
 </form>
