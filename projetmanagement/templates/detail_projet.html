@@ -21,11 +21,13 @@
             {{ projet.nom }}
         </h2>
     </div>
+     {% if user.estGestionnaire == True %}
     <button class="btn creer-btn">
         <a href="{% url 'creer_tache' projet_id=projet.id_projet %}">
             <i class="fas fa-plus"></i> Créer une nouvelle tâche
         </a>
     </button>
+    {% endif %}
 </div>
 
 <table>
