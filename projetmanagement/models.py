@@ -98,3 +98,40 @@ class Taches(models.Model):
 
     def __str__(self):
         return self.libelle
+
+    def calculer_avancement(self):
+        if self.sous_taches.exists():
+            avancements = [sous_tache.avancement for sous_tache in self.sous_taches.all()]
+            avancement_moyen = sum(avancements) / len(avancements)
+            self.avancement = avancement_moyen
+        else:
+            self.avancement = 0
+
+        if self.tache_parent:
+            self.tache_parent.calculer_avancement()
+
+    def mettre_a_jour_statut_parent(self):
+        if self.tache_parent:
+            statuts_sous_taches = [sous_tache.statut for sous_tache in self.tache_parent.sous_taches.all()]
+
+            # Si au moins une sous-tâche est en cours, la tâche parente est en cours
+            if 'En cours' in statuts_sous_taches:
+                self.tache_parent.statut = 'En cours'
+            # Si toutes les sous-tâches sont réalisées, la tâche parente est réalisée
+            elif all(statut == 'Réalisée' for statut in statuts_sous_taches):
+                self.tache_parent.statut = 'Réalisée'
+            # Si toutes les sous-tâches sont validées, la tâche parente est validée
+            elif all(statut == 'Validée' for statut in statuts_sous_taches):
+                self.tache_parent.statut = 'Validée'
+            # Si la tâche parente est en pause mettre toutes les sous-tâches en pause
+            if self.tache_parent.statut == 'En pause':
+                for sous_tache in self.tache_parent.sous_taches.all():
+                    sous_tache.statut = 'En pause'
+                    sous_tache.save()
+
+            self.tache_parent.save()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.calculer_avancement()
+        self.mettre_a_jour_statut_parent()

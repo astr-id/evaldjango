@@ -82,7 +82,7 @@ def creer_tache(request, projet_id):
             projet_id=projet.id_projet
         )
 
-        # Mettre à jour les dates de début et de fin du projet si nécessaire
+        # Met à jour les dates du projet si nécessaire
         if date_debut < projet.date_debut or projet.date_debut is None:
             projet.date_debut = date_debut
         if date_fin > projet.date_fin or projet.date_fin is None:
