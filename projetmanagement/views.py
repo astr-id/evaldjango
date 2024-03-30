@@ -3,7 +3,6 @@ from .models import Projets, Taches
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
-from django.contrib import messages
 
 
 def liste_projets(request):
@@ -13,7 +12,7 @@ def liste_projets(request):
             date_debut = timezone.now().date()
             date_fin = timezone.now().date()
             projet = Projets.objects.create(nom=nom_projet, avancement=0, statut='Planifié', date_fin=date_fin,
-                                            date_debut=date_debut)
+                                            date_debut=date_debut, responsable=request.user)
             return redirect('liste_projets')
     projets = {
         'en cours': Projets.objects.filter(statut='En cours'),
@@ -22,6 +21,7 @@ def liste_projets(request):
         'livrés': Projets.objects.filter(statut='Livré'),
     }
     return render(request, 'liste_projets.html', {'projets': projets})
+
 
 def detail_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
@@ -39,9 +39,14 @@ def detail_projet(request, projet_id):
 
 from datetime import datetime
 
+from datetime import datetime, date
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Projets, Taches
+
 
 def creer_tache(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
+
     if request.method == 'POST':
         libelle = request.POST.get('libelle')
         description = request.POST.get('description')
@@ -52,6 +57,11 @@ def creer_tache(request, projet_id):
 
         date_debut = datetime.strptime(date_debut_str, "%Y-%m-%d").date()
         date_fin = datetime.strptime(date_fin_str, "%Y-%m-%d").date()
+
+        # Vérifie si la date de début est antérieure à la date du jour
+        if date_debut < date.today():
+            return render(request, 'error.html',
+                          {'message': "La date de début ne peut pas être antérieure à la date actuelle."})
 
         # Calculer la durée
         duree = (date_fin - date_debut).days
