@@ -2,15 +2,13 @@
     {% block content %}
         Bonjour {{ user.username }} !
         <!-- Check le groupe d'appartenance da personne loguée -->
-        {% if user.groups.all.0.name == 'Admin' %}
-            Admin
-        {% elif user.groups.all.0.name == 'Gestionnaire' %}
+        {% if user.estResponsable == True %}
+            Responsable
+        {% elif user.estGestionnaire == True %}
             Gestionnaire
-        {% elif user.groups.all.0.name == 'Employe' %}
+        {% else %}
             Employe
             <!-- Block else à supprimer, pour tests seulement -->
-        {% else %}
-            <h2>Nada</h2>
         {% endif %}
         <h1>🎯 Projet Management</h1>
         <form action="{% url 'logout' %}" method="post">

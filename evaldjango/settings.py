@@ -31,13 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'projetmanagement.apps.ProjetmanagementConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'projetmanagement',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Redirect links
 LOGIN_REDIRECT_URL = "liste_projets"
 LOGOUT_REDIRECT_URL = "home"
+
+AUTH_USER_MODEL='projetmanagement.Utilisateur'
