@@ -1,13 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
     <title>{% block title %}Accueil{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style_projets.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style_detail_projet.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style_formulaire_tache.css' %}">
+
 </head>
 
 <body>
 <main>
+    {% include 'header.html' %}
     {% block content %}
     {% endblock %}
 </main>

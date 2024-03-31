@@ -1,61 +1,59 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Créer une nouvelle tâche</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'style_formulaire_tache.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-{% include 'header.html' %}
+{% extends "base.html" %}
+{% block content %}
 
-<h2>Créer une nouvelle tâche</h2>
+    <h2>Créer une nouvelle tâche</h2>
 
-<!-- Conteneur message d'erreur -->
-{% if error_message %}
-    <div class="alert alert-danger" role="alert">
-        {{ error_message }}
-    </div>
-{% endif %}
+    <!-- Conteneur message d'erreur -->
+    {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+    {% endif %}
 
-<!-- Conteneur formulaire-->
-<form class="form_tache" method="post">
-    {% csrf_token %}
-    <label for="libelle">Libellé:</label>
-    <input type="text" id="libelle" name="libelle">
-    <label for="description">Description:</label>
-    <textarea id="description" name="description"></textarea>
-    <label for="priorite">Priorité:</label>
-    <select id="priorite" name="priorite">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-    </select>
-    <label for="date_debut">Date de début:</label>
-    <input type="date" id="date_debut" name="date_debut">
-    <label for="date_fin">Date de fin:</label>
-    <input type="date" id="date_fin" name="date_fin">
-
-    <!-- Conteneur pour selectionner des employés -->
-    <div id="employes_container">
-        <label for="assigne">Assigner la tâche à :</label>
-        <select id="assigne" name="assigne" multiple>
-            {% for utilisateur in utilisateurs %}
-                <option value="{{ utilisateur.id }}">{{ utilisateur.username }}</option>
-            {% endfor %}
+    <!-- Conteneur formulaire-->
+    <form class="form" method="post">
+        {% csrf_token %}
+        <label for="libelle">Libellé:</label>
+        <input type="text" id="libelle" name="libelle">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+        <label for="priorite">Priorité:</label>
+        <select id="priorite" name="priorite">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
         </select>
-    </div>
+        <label for="date_debut">Date de début:</label>
+        <input type="date" id="date_debut" name="date_debut">
+        <label for="date_fin">Date de fin:</label>
+        <input type="date" id="date_fin" name="date_fin">
 
-    <!-- Conteneur les boutons-->
-    <div class="in-line">
-        <button class="btn creer-btn" type="submit"><i class="fas fa-plus"> </i> Créer</button>
-        <button class="btn annuler-btn" type="button" onclick="window.history.back()">
-            <i class="fas fa-times"></i>
-            Annuler
-        </button>
-    </div>
-</form>
+        <!-- Conteneur pour selectionner des employés -->
+        <div id="employes_container">
+            <label for="assigne">Assigner la tâche à :</label>
+            <select id="assigne" name="assigne" multiple>
+                {% for utilisateur in utilisateurs %}
+                    <option value="{{ utilisateur.id }}">{{ utilisateur.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Conteneur les boutons-->
+        <div class="in-line">
+            <button class="btn creer-btn" type="submit"><i class="fas fa-plus"> </i> Créer</button>
+            <button class="btn annuler-btn" type="button" onclick="window.history.back()">
+                <i class="fas fa-times"></i>
+                Annuler
+            </button>
+        </div>
+    </form>
+{% endblock %}
 </body>
 </html>
