@@ -62,7 +62,7 @@
 </head>
 <body>
     {% extends "base.html" %}
-    {% block title %}Login{% endblock %}
+    {% block title %}Connexion{% endblock %}
     {% block content %}
 
     <div class="login-container">
@@ -70,7 +70,7 @@
         <form method="post">
             {% csrf_token %}
             {{ form }}
-            <button type="submit">Log In</button>
+            <button type="submit">Connexion</button>
         </form>
     {% endblock %}
     </div>

@@ -3,6 +3,7 @@ from .models import Projets, Taches
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
+from datetime import datetime, date
 
 
 def liste_projets(request):
@@ -37,15 +38,9 @@ def detail_projet(request, projet_id):
     return render(request, 'detail_projet.html', {'projet': projet, 'taches_par_statut': taches_par_statut})
 
 
-from datetime import datetime
-
-from datetime import datetime, date
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Projets, Taches
-
-
 def creer_tache(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
+    error_message = None
 
     if request.method == 'POST':
         libelle = request.POST.get('libelle')
@@ -60,8 +55,7 @@ def creer_tache(request, projet_id):
 
         # Vérifie si la date de début est antérieure à la date du jour
         if date_debut < date.today():
-            return render(request, 'error.html',
-                          {'message': "La date de début ne peut pas être antérieure à la date actuelle."})
+            error_message = "La date de début ne peut pas être antérieure à la date d'aujourd'hui."
 
         # Calculer la durée
         duree = (date_fin - date_debut).days
@@ -82,7 +76,7 @@ def creer_tache(request, projet_id):
             projet_id=projet.id_projet
         )
 
-        # Met à jour les dates du projet si nécessaire
+        # Met à jour les dates du projet si besoin
         if date_debut < projet.date_debut or projet.date_debut is None:
             projet.date_debut = date_debut
         if date_fin > projet.date_fin or projet.date_fin is None:
@@ -91,8 +85,10 @@ def creer_tache(request, projet_id):
 
         return redirect('detail_projet', projet_id=projet_id)
 
-    return render(request, 'create_tache.html')
+    return render(request, 'create_tache.html', {'error_message': error_message})
 
+
+from django.utils import timezone
 
 def supprimer_tache(request, tache_id):
     tache = get_object_or_404(Taches, id_tache=tache_id)
@@ -100,17 +96,18 @@ def supprimer_tache(request, tache_id):
         projet = tache.projet
         tache.delete()
 
-        # Recalculer les dates de début et de fin du projet
+        # recacul dates du projet
         taches_projet = Taches.objects.filter(projet=projet)
         if taches_projet.exists():
             projet.date_debut = min(taches_projet.values_list('date_debut', flat=True))
             projet.date_fin = max(taches_projet.values_list('date_fin', flat=True))
         else:
-            projet.date_debut = None
+            projet.date_debut = timezone.now()
             projet.date_fin = None
         projet.save()
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 
 def creer_sous_tache(request, tache_id):
@@ -131,7 +128,7 @@ def creer_sous_tache(request, tache_id):
         if date_debut < tache_parente.date_debut or date_fin > tache_parente.date_fin:
             error_message = "Les dates de la sous-tâche doivent être comprises dans celles de la tâche parente."
         else:
-            # Calculer la durée
+            # Calcul la durée
             duree = (date_fin - date_debut).days
 
             # Calcul du niveau de profondeur
@@ -190,3 +187,4 @@ def modifier_statut_tache(request, tache_id):
             tache.projet.verifier_statut_projet()
             return redirect('detail_projet', projet_id=tache.projet_id)
     return HttpResponseBadRequest("Invalid request")
+
