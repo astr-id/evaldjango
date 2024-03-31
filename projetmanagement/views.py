@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Projets, Taches, Utilisateur
 from django.http import HttpResponseRedirect
@@ -5,7 +6,7 @@ from django.http import HttpResponseBadRequest
 from django.utils import timezone
 from datetime import datetime, date
 
-
+@login_required
 def liste_projets(request):
     if request.method == 'POST':
         nom_projet = request.POST.get('nom_projet', '')
@@ -23,7 +24,7 @@ def liste_projets(request):
     }
     return render(request, 'liste_projets.html', {'projets': projets})
 
-
+@login_required
 def detail_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
 
