@@ -7,6 +7,10 @@ body {
     color: #333;
 }
 
+h1 {
+    color: white;
+}
+
 header {
     background-color: #3c5eb4;
     color: #fff;
@@ -18,7 +22,7 @@ header {
     height: 20px;
 }
 
-.logout-button{
+.logout-button {
     background: none;
     border: none;
     padding: 0;
@@ -45,12 +49,6 @@ h3 {
     margin-bottom: 10px;
 }
 
-.retour {
-    margin-left: 30px;
-    margin-top: 20px;
-    margin-bottom: 0px;
-}
-
 .back-icon {
     margin-left: 30px;
     font-size: medium;
@@ -69,6 +67,7 @@ button {
     border: none;
     color: inherit;
 }
+
 .btn {
     align-items: center;
     background-color: #E4E6EA;
@@ -85,7 +84,7 @@ button {
     padding: 4px 8px;
 }
 
-button:hover {
+.btn:hover {
     background-color: #D0D4DB;
 }
 
@@ -105,3 +104,12 @@ p {
 i {
     margin-right: 5px;
 }
+
+.user_bloc {
+    display: flex;
+}
+
+.user_bloc form {
+    margin-left: 10px;
+}
+
