@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Projets, Taches
+from .models import Projets, Taches, Utilisateur
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
@@ -41,6 +41,7 @@ def detail_projet(request, projet_id):
 def creer_tache(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
     error_message = None
+    utilisateurs = Utilisateur.objects.all()
 
     if request.method == 'POST':
         libelle = request.POST.get('libelle')
@@ -48,7 +49,7 @@ def creer_tache(request, projet_id):
         priorite = request.POST.get('priorite')
         date_debut_str = request.POST.get('date_debut')
         date_fin_str = request.POST.get('date_fin')
-        super_tache = request.POST.get('super_tache')
+        employes_ids = request.POST.getlist('assigne')
 
         if not all([libelle, description, priorite, date_debut_str, date_fin_str]):
             error_message = "Merci de remplir tous les champs."
@@ -77,9 +78,11 @@ def creer_tache(request, projet_id):
                     statut="Planifiée",
                     date_fin=date_fin,
                     date_debut=date_debut,
-                    projet_id=projet.id_projet,
-                    gestionnaire=request.user
+                    projet=projet,
+                    gestionnaire=request.user,
                 )
+
+                tache.employes.set(employes_ids)
 
                 # Met à jour les dates du projet si besoin
                 if date_debut < projet.date_debut or projet.date_debut is None:
@@ -93,7 +96,7 @@ def creer_tache(request, projet_id):
             except ValueError:
                 error_message = "Format de date invalide."
 
-    return render(request, 'create_tache.html', {'error_message': error_message})
+    return render(request, 'create_tache.html', {'utilisateurs': utilisateurs, 'error_message': error_message})
 
 
 def supprimer_tache(request, tache_id):
@@ -119,6 +122,7 @@ def creer_sous_tache(request, tache_id):
     tache_parente = get_object_or_404(Taches, pk=tache_id)
     sous_tache = None
     error_message = None
+    utilisateurs = Utilisateur.objects.all()
 
     if request.method == 'POST':
         libelle = request.POST.get('libelle')
@@ -126,6 +130,7 @@ def creer_sous_tache(request, tache_id):
         priorite = request.POST.get('priorite')
         date_debut_str = request.POST.get('date_debut')
         date_fin_str = request.POST.get('date_fin')
+        employes_ids = request.POST.getlist('assigne')
 
         if not all([libelle, description, priorite, date_debut_str, date_fin_str]):
             error_message = "Merci de remplir tous les champs."
@@ -154,15 +159,18 @@ def creer_sous_tache(request, tache_id):
                         date_fin=date_fin,
                         date_debut=date_debut,
                         projet=tache_parente.projet,
-                        tache_parent=tache_parente
+                        tache_parent=tache_parente,
+                        gestionnaire=request.user
                     )
+                    sous_tache.employes.add(*employes_ids)
 
                     return redirect('detail_projet', projet_id=tache_parente.projet_id)
 
             except ValueError:
                 error_message = "Format de date invalide."
 
-    return render(request, 'create_tache.html', {'sous_tache': sous_tache, 'error_message': error_message})
+    return render(request, 'create_tache.html',
+                  {'utilisateurs': utilisateurs, 'sous_tache': sous_tache, 'error_message': error_message})
 
 
 def supprimer_projet(request, projet_id):

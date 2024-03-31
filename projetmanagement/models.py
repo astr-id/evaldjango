@@ -83,7 +83,7 @@ class Taches(models.Model):
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES, default='Planifiée')
     gestionnaire = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True,
                                      validators=[validate_gestionnaire])
-    employes = models.ManyToManyField(Utilisateur, related_name='taches_assignees')
+    employes = models.ManyToManyField(Utilisateur, related_name='taches_assignees', blank=True)
     tache_parent = models.ForeignKey('self', null=True, blank=True, related_name='sous_taches',
                                      on_delete=models.CASCADE)
     date_debut = models.DateField()
@@ -132,3 +132,11 @@ class Taches(models.Model):
         for sous_tache in self.sous_taches.all():
             sous_tache.statut = 'En pause'
             sous_tache.save()
+
+    # ajout un utilisateur à une tâche
+    def ajouter_utilisateur(self, utilisateur):
+        self.employes.add(utilisateur)
+
+    # retirer un utilisateur d'une tâche
+    def retirer_utilisateur(self, utilisateur):
+        self.employes.remove(utilisateur)
