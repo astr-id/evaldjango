@@ -11,6 +11,14 @@
 <body>
 {% include 'header.html' %}
 
+<!-- Conteneur message -->
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
 <div class="in-line">
     <div class="in-line retour">
@@ -29,6 +37,8 @@
         </button>
     {% endif %}
 </div>
+
+
 
 <table>
     <thead>

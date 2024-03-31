@@ -1,10 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Projets, Taches, Utilisateur
-from django.http import HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
 from datetime import datetime, date
-
+from django.contrib import messages
 
 def liste_projets(request):
     if request.method == 'POST':
@@ -105,18 +104,18 @@ def supprimer_tache(request, tache_id):
         projet = tache.projet
         tache.delete()
 
-        # recacul dates du projet
+        # recalcul des dates du projet
         taches_projet = Taches.objects.filter(projet=projet)
         if taches_projet.exists():
             projet.date_debut = min(taches_projet.values_list('date_debut', flat=True))
             projet.date_fin = max(taches_projet.values_list('date_fin', flat=True))
         else:
             projet.date_debut = timezone.now()
-            projet.date_fin = None
+            projet.date_fin =  timezone.now()
         projet.save()
 
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
+        messages.success(request, "La tâche a été supprimée avec succès.")
+        return redirect('detail_projet', projet_id=projet.id_projet)
 
 def creer_sous_tache(request, tache_id):
     tache_parente = get_object_or_404(Taches, pk=tache_id)
@@ -176,7 +175,9 @@ def creer_sous_tache(request, tache_id):
 def supprimer_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
     projet.delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    messages.success(request, "Le projet a été supprimé avec succès.")
+    return redirect('liste_projets')
+
 
 
 def modifier_avancement_tache(request, tache_id):

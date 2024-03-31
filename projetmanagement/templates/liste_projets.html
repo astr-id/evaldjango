@@ -20,6 +20,15 @@
 </form>
 {% endif %}
 
+<!-- Conteneur message -->
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
 {% for status, projets_list in projets.items %}
     {% if projets_list %}
         <h2 class="projets-title">Projets {{ status }}</h2>
