@@ -172,11 +172,11 @@ def creer_sous_tache(request, tache_id):
     return render(request, 'create_tache.html',
                   {'utilisateurs': utilisateurs, 'sous_tache': sous_tache, 'error_message': error_message})
 
-
+#Suppression d'un projet
 def supprimer_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
     projet.delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))#Permet de rester sur la même page
 
 
 def modifier_avancement_tache(request, tache_id):
