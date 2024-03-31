@@ -6,6 +6,7 @@ from django.utils import timezone
 from datetime import datetime, date
 from django.contrib import messages
 
+
 @login_required
 def liste_projets(request):
     if request.method == 'POST':
@@ -24,7 +25,7 @@ def liste_projets(request):
     }
     return render(request, 'liste_projets.html', {'projets': projets})
 
-#juste pour faire un commit
+
 @login_required
 def detail_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
@@ -40,6 +41,7 @@ def detail_projet(request, projet_id):
     return render(request, 'detail_projet.html', {'projet': projet, 'taches_par_statut': taches_par_statut})
 
 
+@login_required
 def creer_tache(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
     error_message = None
@@ -101,6 +103,7 @@ def creer_tache(request, projet_id):
     return render(request, 'create_tache.html', {'utilisateurs': utilisateurs, 'error_message': error_message})
 
 
+@login_required
 def supprimer_tache(request, tache_id):
     tache = get_object_or_404(Taches, id_tache=tache_id)
     if request.method == 'POST':
@@ -114,12 +117,14 @@ def supprimer_tache(request, tache_id):
             projet.date_fin = max(taches_projet.values_list('date_fin', flat=True))
         else:
             projet.date_debut = timezone.now()
-            projet.date_fin =  timezone.now()
+            projet.date_fin = timezone.now()
         projet.save()
 
         messages.success(request, "La tâche a été supprimée avec succès.")
         return redirect('detail_projet', projet_id=projet.id_projet)
 
+
+@login_required
 def creer_sous_tache(request, tache_id):
     tache_parente = get_object_or_404(Taches, pk=tache_id)
     sous_tache = None
@@ -175,6 +180,7 @@ def creer_sous_tache(request, tache_id):
                   {'utilisateurs': utilisateurs, 'sous_tache': sous_tache, 'error_message': error_message})
 
 
+@login_required
 def supprimer_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
     projet.delete()
@@ -182,7 +188,7 @@ def supprimer_projet(request, projet_id):
     return redirect('liste_projets')
 
 
-
+@login_required
 def modifier_avancement_tache(request, tache_id):
     if request.method == 'POST':
         tache = get_object_or_404(Taches, pk=tache_id)
@@ -195,9 +201,10 @@ def modifier_avancement_tache(request, tache_id):
             tache.projet.calculer_avancement_moyen()
             tache.projet.verifier_statut_projet()
             return redirect('detail_projet', projet_id=tache.projet_id)
-    return HttpResponseBadRequest("Invalid request")
+    return HttpResponseBadRequest("Invalid request test")
 
 
+@login_required
 def modifier_statut_tache(request, tache_id):
     if request.method == 'POST':
         tache = get_object_or_404(Taches, pk=tache_id)
