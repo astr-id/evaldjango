@@ -24,6 +24,7 @@ def liste_projets(request):
     }
     return render(request, 'liste_projets.html', {'projets': projets})
 
+#juste pour faire un commit
 @login_required
 def detail_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
