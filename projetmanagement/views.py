@@ -50,45 +50,51 @@ def creer_tache(request, projet_id):
         date_fin_str = request.POST.get('date_fin')
         super_tache = request.POST.get('super_tache')
 
-        date_debut = datetime.strptime(date_debut_str, "%Y-%m-%d").date()
-        date_fin = datetime.strptime(date_fin_str, "%Y-%m-%d").date()
+        if not all([libelle, description, priorite, date_debut_str, date_fin_str]):
+            error_message = "Merci de remplir tous les champs."
+        else:
+            try:
+                date_debut = datetime.strptime(date_debut_str, "%Y-%m-%d").date()
+                date_fin = datetime.strptime(date_fin_str, "%Y-%m-%d").date()
 
-        # Vérifie si la date de début est antérieure à la date du jour
-        if date_debut < date.today():
-            error_message = "La date de début ne peut pas être antérieure à la date d'aujourd'hui."
+                # Vérifie si la date de début est antérieure à la date du jour
+                if date_debut < date.today():
+                    error_message = "La date de début ne peut pas être antérieure à la date d'aujourd'hui."
 
-        # Calculer la durée
-        duree = (date_fin - date_debut).days
+                # Calculer la durée
+                duree = (date_fin - date_debut).days
 
-        # Calcul du niveau de profondeur
-        niveau_profondeur = 0
+                # Calcul du niveau de profondeur
+                niveau_profondeur = 0
 
-        tache = Taches.objects.create(
-            libelle=libelle,
-            description=description,
-            niveau_profondeur=niveau_profondeur,
-            duree=duree,
-            avancement=0,
-            priorite=priorite,
-            statut="Planifiée",
-            date_fin=date_fin,
-            date_debut=date_debut,
-            projet_id=projet.id_projet
-        )
+                tache = Taches.objects.create(
+                    libelle=libelle,
+                    description=description,
+                    niveau_profondeur=niveau_profondeur,
+                    duree=duree,
+                    avancement=0,
+                    priorite=priorite,
+                    statut="Planifiée",
+                    date_fin=date_fin,
+                    date_debut=date_debut,
+                    projet_id=projet.id_projet,
+                    gestionnaire=request.user
+                )
 
-        # Met à jour les dates du projet si besoin
-        if date_debut < projet.date_debut or projet.date_debut is None:
-            projet.date_debut = date_debut
-        if date_fin > projet.date_fin or projet.date_fin is None:
-            projet.date_fin = date_fin
-        projet.save()
+                # Met à jour les dates du projet si besoin
+                if date_debut < projet.date_debut or projet.date_debut is None:
+                    projet.date_debut = date_debut
+                if date_fin > projet.date_fin or projet.date_fin is None:
+                    projet.date_fin = date_fin
+                projet.save()
 
-        return redirect('detail_projet', projet_id=projet_id)
+                return redirect('detail_projet', projet_id=projet_id)
+
+            except ValueError:
+                error_message = "Format de date invalide."
 
     return render(request, 'create_tache.html', {'error_message': error_message})
 
-
-from django.utils import timezone
 
 def supprimer_tache(request, tache_id):
     tache = get_object_or_404(Taches, id_tache=tache_id)
@@ -109,7 +115,6 @@ def supprimer_tache(request, tache_id):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-
 def creer_sous_tache(request, tache_id):
     tache_parente = get_object_or_404(Taches, pk=tache_id)
     sous_tache = None
@@ -122,33 +127,40 @@ def creer_sous_tache(request, tache_id):
         date_debut_str = request.POST.get('date_debut')
         date_fin_str = request.POST.get('date_fin')
 
-        date_debut = datetime.strptime(date_debut_str, "%Y-%m-%d").date()
-        date_fin = datetime.strptime(date_fin_str, "%Y-%m-%d").date()
-
-        if date_debut < tache_parente.date_debut or date_fin > tache_parente.date_fin:
-            error_message = "Les dates de la sous-tâche doivent être comprises dans celles de la tâche parente."
+        if not all([libelle, description, priorite, date_debut_str, date_fin_str]):
+            error_message = "Merci de remplir tous les champs."
         else:
-            # Calcul la durée
-            duree = (date_fin - date_debut).days
+            try:
+                date_debut = datetime.strptime(date_debut_str, "%Y-%m-%d").date()
+                date_fin = datetime.strptime(date_fin_str, "%Y-%m-%d").date()
 
-            # Calcul du niveau de profondeur
-            niveau_profondeur = tache_parente.niveau_profondeur + 1
+                if date_debut < tache_parente.date_debut or date_fin > tache_parente.date_fin:
+                    error_message = "Les dates de la sous-tâche doivent être comprises dans celles de la tâche parente."
+                else:
+                    # Calcul la durée
+                    duree = (date_fin - date_debut).days
 
-            sous_tache = Taches.objects.create(
-                libelle=libelle,
-                description=description,
-                niveau_profondeur=niveau_profondeur,
-                duree=duree,
-                avancement=0,
-                priorite=priorite,
-                statut="Planifiée",
-                date_fin=date_fin,
-                date_debut=date_debut,
-                projet=tache_parente.projet,
-                tache_parent=tache_parente
-            )
+                    # Calcul du niveau de profondeur
+                    niveau_profondeur = tache_parente.niveau_profondeur + 1
 
-            return redirect('detail_projet', projet_id=tache_parente.projet_id)
+                    sous_tache = Taches.objects.create(
+                        libelle=libelle,
+                        description=description,
+                        niveau_profondeur=niveau_profondeur,
+                        duree=duree,
+                        avancement=0,
+                        priorite=priorite,
+                        statut="Planifiée",
+                        date_fin=date_fin,
+                        date_debut=date_debut,
+                        projet=tache_parente.projet,
+                        tache_parent=tache_parente
+                    )
+
+                    return redirect('detail_projet', projet_id=tache_parente.projet_id)
+
+            except ValueError:
+                error_message = "Format de date invalide."
 
     return render(request, 'create_tache.html', {'sous_tache': sous_tache, 'error_message': error_message})
 
@@ -187,4 +199,3 @@ def modifier_statut_tache(request, tache_id):
             tache.projet.verifier_statut_projet()
             return redirect('detail_projet', projet_id=tache.projet_id)
     return HttpResponseBadRequest("Invalid request")
-

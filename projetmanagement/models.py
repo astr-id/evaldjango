@@ -83,6 +83,7 @@ class Taches(models.Model):
     statut = models.CharField(max_length=50, choices=STATUT_CHOICES, default='Planifiée')
     gestionnaire = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True,
                                      validators=[validate_gestionnaire])
+    employes = models.ManyToManyField(Utilisateur, related_name='taches_assignees')
     tache_parent = models.ForeignKey('self', null=True, blank=True, related_name='sous_taches',
                                      on_delete=models.CASCADE)
     date_debut = models.DateField()
