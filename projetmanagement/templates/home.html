@@ -12,7 +12,7 @@
 {% block content %}
     <script>
         {% if user.is_authenticated %}
-            window.location.href = "{% url "liste_projets" %}
+            window.location.href = "{% url "liste_projets" %}";
         {% else %}
             window.location.href = "{% url "login" %}";
         {% endif %}
