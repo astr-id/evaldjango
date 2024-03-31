@@ -3,6 +3,16 @@ from django.db import models
 from django.contrib.auth.models import User, Group, AbstractUser
 
 
+class Utilisateur(AbstractUser):
+    estResponsable = models.BooleanField(default=False)
+    estGestionnaire = models.BooleanField(default=False)
+
+    def clean(self):
+        super().clean()
+        if self.estResponsable and self.estGestionnaire:
+            raise ValidationError("Une personne ne peut pas être à la fois responsable et gestionnaire.")
+
+
 class Dates(models.Model):
     id_date = models.IntegerField(primary_key=True)
     debut = models.DateField()
@@ -12,17 +22,7 @@ class Dates(models.Model):
         ('Congés', 'Congés'),
     )
     type = models.CharField(max_length=50, choices=STATUT_CHOICES)
-
-
-class Utilisateur(AbstractUser):
-    estResponsable = models.BooleanField(default=False)
-    estGestionnaire = models.BooleanField(default=False)
-    absence = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
-
-    def clean(self):
-        super().clean()
-        if self.estResponsable and self.estGestionnaire:
-            raise ValidationError("Une personne ne peut pas être à la fois responsable et gestionnaire.")
+    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
 
 
 class Projets(models.Model):

@@ -219,7 +219,6 @@ def modifier_statut_tache(request, tache_id):
             return redirect('detail_projet', projet_id=tache.projet_id)
     return HttpResponseBadRequest("Invalid request")
 
-
 @login_required
 def saisie_absence(request):
     if request.method == 'POST':
@@ -231,10 +230,8 @@ def saisie_absence(request):
             debut=debut,
             fin=fin,
             type=type_absence,
+            utilisateur=Utilisateur.objects.get(username=request.user.username)
         )
 
-        user = Utilisateur.objects.get(username=request.user.username)
-        user.absence = absence
-        user.save()
 
     return render(request, 'saisie_absence.html')
