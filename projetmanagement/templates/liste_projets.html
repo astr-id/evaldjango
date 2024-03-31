@@ -29,6 +29,11 @@
     </ul>
 {% endif %}
 
+<a href="{% url 'saisie_absence'  %}">
+    <button>saisie_absence</button>
+
+</a>
+
 {% for status, projets_list in projets.items %}
     {% if projets_list %}
         <h2 class="projets-title">Projets {{ status }}</h2>

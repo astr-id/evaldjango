@@ -11,4 +11,5 @@ urlpatterns = [
     path('modifier_statut_tache/<int:tache_id>/', views.modifier_statut_tache, name='modifier_statut_tache'),
     path('projet/<int:tache_id>/creer-sous-tache/', views.creer_sous_tache, name='creer_sous_tache'),
     path('supprimer_tache/<int:tache_id>/', views.supprimer_tache, name='supprimer_tache'),
+    path('saisie_absence/', views.saisie_absence, name='saisie_absence'),
 ]

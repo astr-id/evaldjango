@@ -1,0 +1,25 @@
+<!-- templates/saisie_absence.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saisie d'absence</title>
+</head>
+<body>
+<h1>Saisie d'absence</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="type">Motif:</label>
+    <select id="type" name="type">
+        <option value="Arrêt maladie">Arrêt maladie</option>
+        <option value="Congés">Congés</option>
+    </select>
+    <label for="debut">Date de début:</label>
+    <input type="date" id="debut" name="debut">
+    <label for="fin">Date de fin:</label>
+    <input type="date" id="fin" name="fin">
+    <button type="submit">Soumettre</button>
+</form>
+</body>
+</html>

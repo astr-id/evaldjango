@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Projets, Taches, Utilisateur
+from .models import Projets, Taches, Utilisateur, Dates
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
 from datetime import datetime, date
@@ -218,3 +218,23 @@ def modifier_statut_tache(request, tache_id):
             tache.projet.verifier_statut_projet()
             return redirect('detail_projet', projet_id=tache.projet_id)
     return HttpResponseBadRequest("Invalid request")
+
+
+@login_required
+def saisie_absence(request):
+    if request.method == 'POST':
+        debut = request.POST.get('debut')
+        fin = request.POST.get('fin')
+        type_absence = request.POST.get('type')
+
+        absence = Dates.objects.create(
+            debut=debut,
+            fin=fin,
+            type=type_absence,
+        )
+
+        user = Utilisateur.objects.get(username=request.user.username)
+        user.absence = absence
+        user.save()
+
+    return render(request, 'saisie_absence.html')

@@ -3,21 +3,26 @@ from django.db import models
 from django.contrib.auth.models import User, Group, AbstractUser
 
 
+class Dates(models.Model):
+    id_date = models.IntegerField(primary_key=True)
+    debut = models.DateField()
+    fin = models.DateField()
+    STATUT_CHOICES = (
+        ('Arrêt maladie', 'Arrêt maladie'),
+        ('Congés', 'Congés'),
+    )
+    type = models.CharField(max_length=50, choices=STATUT_CHOICES)
+
+
 class Utilisateur(AbstractUser):
     estResponsable = models.BooleanField(default=False)
     estGestionnaire = models.BooleanField(default=False)
+    absence = models.ForeignKey(Dates, on_delete=models.SET_NULL, null=True)
 
     def clean(self):
         super().clean()
         if self.estResponsable and self.estGestionnaire:
             raise ValidationError("Une personne ne peut pas être à la fois responsable et gestionnaire.")
-
-
-class Dates(models.Model):
-    id_date = models.IntegerField(primary_key=True)
-    debut = models.DateField()
-    fin = models.DateField()
-    type = models.CharField(max_length=50)
 
 
 class Projets(models.Model):
@@ -48,9 +53,14 @@ class Projets(models.Model):
 
     def verifier_statut_projet(self):
         toutes_taches_terminees = self.taches_set.filter(
-            statut__in=['Réalisée', 'Validée']).count() == self.taches_set.count()
+            statut__in=['Validée']).count() == self.taches_set.count()
+        toutes_taches_pauses = self.taches_set.filter(
+            statut__in=['En pause']).count() == self.taches_set.count()
         if toutes_taches_terminees:
             self.statut = 'Livré'
+            self.save()
+        if toutes_taches_pauses:
+            self.statut = 'En pause'
             self.save()
 
 
