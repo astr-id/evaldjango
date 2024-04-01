@@ -109,6 +109,31 @@
                                         </button>
                                     </form>
 
+                                     <!-- boutons pour ajouter/supprimer des employés de la tache -->
+                                    <form method="post" action="{% url 'ajouter_employe_tache' tache_id=tache.id_tache %}">
+                                        {% csrf_token %}
+                                        <select name="employe" class="tache-input">
+                                            {% for utilisateur in utilisateurs %}
+                                                <option value="{{ utilisateur.id }}">{{ utilisateur.username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="btn modifier-btn">
+                                            <i class="fas fa-user-plus" style="margin-right: 0px" ;></i>
+                                        </button>
+                                    </form>
+
+                                    <form method="post" action="{% url 'supprimer_employe_tache' tache_id=tache.id_tache %}">
+                                        {% csrf_token %}
+                                        <select name="employe" class="tache-input">
+                                            {% for utilisateur in tache.employes.all %}
+                                                <option value="{{ utilisateur.id }}">{{ utilisateur.username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="btn modifier-btn">
+                                            <i class="fas fa-user-minus" style="margin-right: 0px" ;></i>
+                                        </button>
+                                    </form>
+
                                     {% if tache.niveau_profondeur == 0 or tache.niveau_profondeur == 1 %}
                                         <button class="btn creer-btn">
                                             <a href="{% url 'creer_sous_tache' tache_id=tache.id_tache %}">

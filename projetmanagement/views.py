@@ -29,6 +29,7 @@ def liste_projets(request):
 @login_required
 def detail_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
+    utilisateurs = Utilisateur.objects.all()
 
     taches_par_statut = {
         'Planifiée': Taches.objects.filter(projet_id=projet.id_projet, statut='Planifiée'),
@@ -38,7 +39,8 @@ def detail_projet(request, projet_id):
         'Validée': Taches.objects.filter(projet_id=projet.id_projet, statut='Validée'),
     }
 
-    return render(request, 'detail_projet.html', {'projet': projet, 'taches_par_statut': taches_par_statut})
+    return render(request, 'detail_projet.html',
+                  {'projet': projet, 'taches_par_statut': taches_par_statut, 'utilisateurs': utilisateurs})
 
 
 @login_required
@@ -219,6 +221,7 @@ def modifier_statut_tache(request, tache_id):
             return redirect('detail_projet', projet_id=tache.projet_id)
     return HttpResponseBadRequest("Invalid request")
 
+
 @login_required
 def saisie_absence(request):
     if request.method == 'POST':
@@ -233,5 +236,24 @@ def saisie_absence(request):
             utilisateur=Utilisateur.objects.get(username=request.user.username)
         )
 
-
     return render(request, 'saisie_absence.html')
+
+
+@login_required
+def ajouter_employe_tache(request, tache_id):
+    if request.method == 'POST':
+        tache = get_object_or_404(Taches, pk=tache_id)
+        utilisateur_id = request.POST.get('employe')
+        utilisateur = get_object_or_404(Utilisateur, pk=utilisateur_id)
+        tache.employes.add(utilisateur)
+    return redirect('detail_projet', projet_id=tache.projet_id)
+
+
+@login_required
+def supprimer_employe_tache(request, tache_id):
+    if request.method == 'POST':
+        tache = get_object_or_404(Taches, pk=tache_id)
+        utilisateur_id = request.POST.get('employe')
+        utilisateur = get_object_or_404(Utilisateur, pk=utilisateur_id)
+        tache.employes.remove(utilisateur)
+    return redirect('detail_projet', projet_id=tache.projet_id)
