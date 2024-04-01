@@ -39,7 +39,7 @@ th {
     font-size: 14px;
 }
 
-ul {
+.taches-list {
     padding: 0px;
     flex-grow: 1;
 }
@@ -61,7 +61,8 @@ ul {
     margin: 0 30px;
 }
 
-input, select {
+.tache-input {
     padding: 5px !important;
     font-size: xx-small;
+    width: 75px;
 }
