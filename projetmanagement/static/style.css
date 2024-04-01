@@ -22,11 +22,6 @@ header {
     height: 20px;
 }
 
-.logout-button {
-    background: none;
-    border: none;
-    padding: 0;
-}
 
 .logout-icon {
     color: #fff;
@@ -113,3 +108,41 @@ i {
     margin-left: 10px;
 }
 
+.iconBtn {
+    cursor: pointer;
+}
+
+.messages {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.messages li {
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+input, select, textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+h2 {
+    text-align: center;
+    margin: 0 0 0 30px;
+}
+
+.margin {
+    margin: 20px 30px 0 30px;
+}

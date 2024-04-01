@@ -7,14 +7,6 @@
 <body>
 {% extends "base.html" %}
 {% block content %}
-    <!-- Si l'utilisateur est Responsable, il aura accès à ce formulaire -->
-    {% if user.estResponsable == True %}
-        <form action="" method="post">
-            {% csrf_token %}
-            <input type="text" name="nom_projet" placeholder="Nom du projet" required>
-            <button class="btn creer-btn" type="submit"><i class="fas fa-plus"></i> Créer nouveau projet</button>
-        </form>
-    {% endif %}
 
     <!-- Conteneur message -->
     {% if messages %}
@@ -25,10 +17,20 @@
         </ul>
     {% endif %}
 
-    <a href="{% url 'saisie_absence' %}">
-        <button>saisie_absence</button>
+    <div class="in-line margin">
+        <!-- Si l'utilisateur est Responsable, il aura accès à ce formulaire -->
+        {% if user.estResponsable == True %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <input class="create-projet-input" type="text" name="nom_projet" placeholder="Nom du projet" required >
+                <button class="btn creer-btn" type="submit"><i class="fas fa-plus"></i> Créer nouveau projet</button>
+            </form>
+        {% endif %}
 
-    </a>
+        <a href="{% url 'saisie_absence' %}">
+            <button class="btn"><i class="fas fa-calendar"></i>Saisie absence</button>
+        </a>
+    </div>
 
     {% for status, projets_list in projets.items %}
         {% if projets_list %}

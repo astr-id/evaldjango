@@ -14,7 +14,7 @@
             {% endif %}
             <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
-                <button type="submit" class="logout-button">
+                <button type="submit" class="iconBtn">
                     <i class="fas fa-sign-out-alt logout-icon" title="Déconnexion"></i>
                 </button>
             </form>

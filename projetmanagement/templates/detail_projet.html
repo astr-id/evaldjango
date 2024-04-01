@@ -17,8 +17,8 @@
         </ul>
     {% endif %}
 
-    <div class="in-line">
-        <div class="in-line retour">
+    <div class="in-line margin">
+        <div class="in-line">
             <a href="{% url 'liste_projets' %}">
                 <i class="fas fa-chevron-left back-icon" title="Retour"></i>
             </a>
@@ -50,7 +50,7 @@
         <tr>
             {% for statut, taches in taches_par_statut.items %}
                 <td class="statut {{ statut }}">
-                    <ul>
+                    <ul class="taches-list">
                         {% for tache in taches %}
                             <li class="tache">
 
@@ -87,7 +87,7 @@
                                     <form method="post"
                                           action="{% url 'modifier_avancement_tache' tache_id=tache.id_tache %}">
                                         {% csrf_token %}
-                                        <input type="number" name="avancement" min="0" max="100" required>
+                                        <input type="number" class="tache-input" name="avancement" min="0" max="100" required>
                                         <button type="submit" class="btn modifier-btn">
                                             <i class="fas fa-pen" style="margin-right: 0px" ;></i>
                                         </button>
@@ -97,7 +97,7 @@
                                           action="{% url 'modifier_statut_tache' tache_id=tache.id_tache %}">
                                         {% csrf_token %}
                                         <label for="statut"><strong>Statut :</strong></label>
-                                        <select name="statut">
+                                        <select name="statut" class="tache-input">
                                             <option value="Planifiée">Planifiée</option>
                                             <option value="En cours">En cours</option>
                                             <option value="Réalisée">Réalisée</option>

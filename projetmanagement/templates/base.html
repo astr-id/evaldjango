@@ -9,12 +9,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'style_detail_projet.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'style_formulaire_tache.css' %}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
 <main>
-    {% include 'header.html' %}
+    {% if 'login' not in request.path %}
+        {% include 'header.html' %}
+    {% endif %}
     {% block content %}
     {% endblock %}
 </main>
