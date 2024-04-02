@@ -35,15 +35,15 @@ def create_projects():
 
 def create_tasks():
     tasks_data = [
-        Taches(libelle="Task 1", description="Description for Task 1", niveau_profondeur=1, duree=10, avancement=20.5,
+        Taches(id_tache=1,libelle="Task 1", description="Description for Task 1", niveau_profondeur=1, duree=10, avancement=20.5,
                priorite=2, statut="Planifiée", date_debut="2024-04-01", date_fin="2024-04-10", projet_id=1, gestionnaire_id=2),
-        Taches(libelle="Task 2", description="Description for Task 2", niveau_profondeur=1, duree=20, avancement=10.2,
+        Taches(id_tache=2,libelle="Task 2", description="Description for Task 2", niveau_profondeur=1, duree=20, avancement=10.2,
                priorite=1, statut="En cours", date_debut="2024-03-15", date_fin="2024-04-04", projet_id=2, gestionnaire_id=2),
-        Taches(libelle="Task 3", description="Description for Task 3", niveau_profondeur=1, duree=15, avancement=50.0,
+        Taches(id_tache=3,libelle="Task 3", description="Description for Task 3", niveau_profondeur=1, duree=15, avancement=50.0,
                priorite=3, statut="Réalisée", date_debut="2024-01-01", date_fin="2024-01-16", projet_id=3, gestionnaire_id=2),
-        Taches(libelle="Task 4", description="Description for Task 4", niveau_profondeur=1, duree=5, avancement=0,
+        Taches(id_tache=4,libelle="Task 4", description="Description for Task 4", niveau_profondeur=1, duree=5, avancement=0,
                priorite=2, statut="En pause", date_debut="2024-04-01", date_fin="2024-04-05", projet_id=4, gestionnaire_id=2),
-        Taches(libelle="Task 5", description="Description for Task 5", niveau_profondeur=1, duree=30, avancement=75.3,
+        Taches(id_tache=5,libelle="Task 5", description="Description for Task 5", niveau_profondeur=1, duree=30, avancement=75.3,
                priorite=1, statut="Validée", date_debut="2024-02-15", date_fin="2024-03-16", projet_id=5, gestionnaire_id=2)
     ]
     Taches.objects.bulk_create(tasks_data)
