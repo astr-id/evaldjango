@@ -142,11 +142,3 @@ class Taches(models.Model):
         for sous_tache in self.sous_taches.all():
             sous_tache.statut = 'En pause'
             sous_tache.save()
-
-    # ajout un utilisateur à une tâche
-    def ajouter_utilisateur(self, utilisateur):
-        self.employes.add(utilisateur)
-
-    # retirer un utilisateur d'une tâche
-    def retirer_utilisateur(self, utilisateur):
-        self.employes.remove(utilisateur)
