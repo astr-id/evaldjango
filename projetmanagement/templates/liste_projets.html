@@ -22,7 +22,7 @@
         {% if user.estResponsable == True %}
             <form action="" method="post">
                 {% csrf_token %}
-                <input class="create-projet-input" type="text" name="nom_projet" placeholder="Nom du projet" required >
+                <input class="create-projet-input" type="text" name="nom_projet" placeholder="Nom du projet" required>
                 <button class="btn creer-btn" type="submit"><i class="fas fa-plus"></i> Créer nouveau projet</button>
             </form>
         {% endif %}
@@ -37,8 +37,8 @@
             <h2 class="projets-title">Projets {{ status }}</h2>
             <ul class="projets">
                 {% for projet in projets_list %}
-                    <a href="{% url 'detail_projet' projet.id_projet %}">
-                        <li class="projet {{ status }}">
+                    <li class="projet {{ status }}">
+                        <a href="{% url 'detail_projet' projet.id_projet %}">
                             <div class="in-line">
                                 <h3>{{ projet.nom }}</h3>
                                 <!-- Si l'utilisateur est Responsable, il pourra supprimer le projet -->
@@ -54,8 +54,25 @@
                             <p><strong>Avancement : </strong>{{ projet.avancement }}</p>
                             <p><strong>Date début : </strong>{{ projet.date_debut|date:"d/m/Y" }}</p>
                             <p><strong>Date fin : </strong>{{ projet.date_fin|date:"d/m/Y" }}</p>
-                        </li>
-                    </a>
+                        </a>
+                        <!-- Si l'utilisateur est responsable, il peut modifier le statut du projet-->
+                        {% if user.estResponsable == True %}
+                            <form method="post"
+                                  action="{% url 'modifier_statut_projet' projet_id=projet.id_projet %}">
+                                {% csrf_token %}
+                                <label for="statut"><strong>Statut :</strong></label>
+                                <select name="statut" class="tache-input">
+                                    <option value="Planifié">Planifié</option>
+                                    <option value="En cours">En cours</option>
+                                    <option value="Livré">Livré</option>
+                                    <option value="En pause">En pause</option>
+                                </select>
+                                <button type="submit" class="btn modifier-btn">
+                                    <i class="fas fa-pen" style="margin-right: 0px" ;></i>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </li>
                 {% endfor %}
             </ul>
         {% endif %}

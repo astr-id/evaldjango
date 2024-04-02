@@ -189,6 +189,17 @@ def supprimer_projet(request, projet_id):
     messages.success(request, "Le projet a été supprimé avec succès.")
     return redirect('liste_projets')
 
+def modifier_statut_projet(request, projet_id):
+    if request.method == 'POST':
+        projet = get_object_or_404(Projets, pk=projet_id)
+        nouveau_statut = request.POST.get('statut')
+        if projet.avancement == 100:
+            projet.statut = 'Livré'
+        if nouveau_statut in ['Planifié', 'En cours', 'En pause', 'Livré']:
+            projet.statut = nouveau_statut
+            projet.save()
+            return redirect('liste_projets')
+
 
 @login_required
 def modifier_avancement_tache(request, tache_id):
