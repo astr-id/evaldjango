@@ -56,12 +56,32 @@ class Projets(models.Model):
             statut__in=['Validée']).count() == self.taches_set.count()
         toutes_taches_pauses = self.taches_set.filter(
             statut__in=['En pause']).count() == self.taches_set.count()
+        toutes_taches_realisees = self.taches_set.filter(
+            statut__in=['Réalisée']).count() == self.taches_set.count()
         if toutes_taches_terminees:
             self.statut = 'Livré'
             self.save()
+            return
         if toutes_taches_pauses:
             self.statut = 'En pause'
             self.save()
+            return
+        if toutes_taches_realisees:
+            self.statut = "En cours"
+            self.save()
+            return
+        #Si une des taches est en cours, alors le projet est en cours.
+        for tache in self.taches_set.all():
+            if tache.statut == 'En cours':
+                self.statut = 'En cours'
+                self.save()
+                return
+        #Si une des taches est en planifiée, alors le projet est planifié
+        for tache in self.taches_set.all():
+            if tache.statut == 'Planifiée':
+                self.statut = 'Planifié'
+                self.save()
+                return
 
 
 # Utile pour vérifier que l'utilisateur gérant la tache a bien l'attribut estGestionnaire à True
@@ -150,3 +170,4 @@ class Taches(models.Model):
             self.statut = 'En pause'
             return True
         return False
+
