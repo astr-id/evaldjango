@@ -31,6 +31,9 @@ def detail_projet(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
     utilisateurs = Utilisateur.objects.all()
 
+    for tache in Taches.objects.filter(projet_id=projet.id_projet):
+        tache.mettre_a_jour_statut_absence()
+
     taches_par_statut = {
         'Planifiée': Taches.objects.filter(projet_id=projet.id_projet, statut='Planifiée'),
         'En cours': Taches.objects.filter(projet_id=projet.id_projet, statut='En cours'),
@@ -189,6 +192,7 @@ def supprimer_projet(request, projet_id):
     messages.success(request, "Le projet a été supprimé avec succès.")
     return redirect('liste_projets')
 
+
 @login_required
 def modifier_statut_projet(request, projet_id):
     if request.method == 'POST':
@@ -267,9 +271,9 @@ def supprimer_employe_tache(request, tache_id):
     if request.method == 'POST':
         tache = get_object_or_404(Taches, pk=tache_id)
         utilisateur_id = request.POST.get('employe')
-        if utilisateur_id is not None: #Evite de supprimer un utilisateur qui n'existe pas
+        if utilisateur_id is not None:  # Evite de supprimer un utilisateur qui n'existe pas
             utilisateur = get_object_or_404(Utilisateur, pk=utilisateur_id)
-        if tache.employes.exists():#S'il y a bien des employes assignes à la tache, supprimer l'utilisateur
+        if tache.employes.exists():  # S'il y a bien des employes assignes à la tache, supprimer l'utilisateur
             tache.employes.remove(utilisateur)
         tache.check_employe()
         tache.save()

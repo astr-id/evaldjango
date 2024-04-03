@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User, Group, AbstractUser
+from datetime import datetime, date
+from django.utils import timezone
 
 
 class Utilisateur(AbstractUser):
@@ -70,13 +72,13 @@ class Projets(models.Model):
             self.statut = "En cours"
             self.save()
             return
-        #Si une des taches est en cours, alors le projet est en cours.
+        # Si une des taches est en cours, alors le projet est en cours.
         for tache in self.taches_set.all():
             if tache.statut == 'En cours':
                 self.statut = 'En cours'
                 self.save()
                 return
-        #Si une des taches est en planifiée, alors le projet est planifié
+        # Si une des taches est en planifiée, alors le projet est planifié
         for tache in self.taches_set.all():
             if tache.statut == 'Planifiée':
                 self.statut = 'Planifié'
@@ -163,6 +165,26 @@ class Taches(models.Model):
             sous_tache.statut = 'En pause'
             sous_tache.save()
 
+    def mettre_a_jour_statut_absence(self):
+        employes_tache = self.employes.all()
+        employes_absents = []
+        debut_tache = self.date_debut
+        fin_tache = self.date_fin
+        aujourdhui = timezone.now().date()
+
+        for employe in employes_tache:
+            dates_absence = Dates.objects.filter(utilisateur=employe.id)
+            for date in dates_absence:
+                if date.debut < aujourdhui and date.fin > aujourdhui:
+                    employes_absents.append(employe)
+
+        if len(employes_absents) == len(employes_tache):
+            self.statut = "En pause"
+        else:
+            self.statut = self.statut
+
+        self.save()
+
     #  Check s'il n'y a plus d'employes et que la tache est en cours, la mettre en pause
     def check_employe(self):
         print(self.employes)
@@ -171,3 +193,20 @@ class Taches(models.Model):
             return True
         return False
 
+    def mettre_a_jour_statut_absence(self):
+        employes_tache = self.employes.all()
+        employes_absents = []
+        aujourdhui = timezone.now().date()
+
+        for employe in employes_tache:
+            dates_absence = Dates.objects.filter(utilisateur=employe.id)
+            for date in dates_absence:
+                if date.debut < aujourdhui and date.fin > aujourdhui:
+                    employes_absents.append(employe)
+
+        if len(employes_absents) == len(employes_tache):
+            self.statut = "En pause"
+        else:
+            self.statut = self.statut
+
+        self.save()
