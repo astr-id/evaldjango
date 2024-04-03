@@ -25,12 +25,12 @@ def liste_projets(request):
             return redirect('liste_projets')
         else:
             messages.error(request, "Le nom du projet est vide.")
-        projets = {
-            'en cours': Projets.objects.filter(statut='En cours'),
-            'planifiés': Projets.objects.filter(statut='Planifié'),
-            'en pause': Projets.objects.filter(statut='En pause'),
-            'livrés': Projets.objects.filter(statut='Livré'),
-        }
+    projets = {
+        'en cours': Projets.objects.filter(statut='En cours'),
+        'planifiés': Projets.objects.filter(statut='Planifié'),
+        'en pause': Projets.objects.filter(statut='En pause'),
+        'livrés': Projets.objects.filter(statut='Livré'),
+    }
     return render(request, 'liste_projets.html', {'projets': projets})
 
 
