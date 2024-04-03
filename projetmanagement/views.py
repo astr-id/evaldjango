@@ -258,9 +258,10 @@ def saisie_absence(request):
             type=type_absence,
             utilisateur=Utilisateur.objects.get(username=request.user.username)
         )
-        #for tache in Taches.objects.contains(Utilisateur.objects.get(id=request.user.id)):
-        #    tache.mettre_a_jour_statut_absence()
-    return render(request, 'saisie_absence.html')
+        for tache in Taches.objects.all():
+            if tache.employes.contains(request.user):
+                tache.mettre_a_jour_statut_absence()
+    return redirect('liste_projets')
 
 
 @login_required
