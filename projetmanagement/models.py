@@ -165,25 +165,6 @@ class Taches(models.Model):
             sous_tache.statut = 'En pause'
             sous_tache.save()
 
-    def mettre_a_jour_statut_absence(self):
-        employes_tache = self.employes.all()
-        employes_absents = []
-        debut_tache = self.date_debut
-        fin_tache = self.date_fin
-        aujourdhui = timezone.now().date()
-
-        for employe in employes_tache:
-            dates_absence = Dates.objects.filter(utilisateur=employe.id)
-            for date in dates_absence:
-                if date.debut < aujourdhui and date.fin > aujourdhui:
-                    employes_absents.append(employe)
-
-        if len(employes_absents) == len(employes_tache):
-            self.statut = "En pause"
-        else:
-            self.statut = self.statut
-
-        self.save()
 
     #  Check s'il n'y a plus d'employes et que la tache est en cours, la mettre en pause
     def check_employe(self):
@@ -201,7 +182,7 @@ class Taches(models.Model):
         for employe in employes_tache:
             dates_absence = Dates.objects.filter(utilisateur=employe.id)
             for date in dates_absence:
-                if date.debut < aujourdhui and date.fin > aujourdhui:
+                if date.debut <= aujourdhui and date.fin >= aujourdhui:
                     employes_absents.append(employe)
 
         if len(employes_absents) == len(employes_tache):

@@ -14,5 +14,6 @@ urlpatterns = [
     path('saisie_absence/', views.saisie_absence, name='saisie_absence'),
     path('ajouter_employe_tache/<int:tache_id>/', views.ajouter_employe_tache, name='ajouter_employe_tache'),
     path('supprimer_employe_tache/<int:tache_id>/', views.supprimer_employe_tache, name='supprimer_employe_tache'),
-    path('modifier_statut_projet/<int:projet_id>/', views.modifier_statut_projet, name='modifier_statut_projet')
+    path('modifier_statut_projet/<int:projet_id>/', views.modifier_statut_projet, name='modifier_statut_projet'),
+    path('*', views.homepage)
 ]

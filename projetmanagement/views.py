@@ -1,11 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Projets, Taches, Utilisateur, Dates
-from django.http import HttpResponseBadRequest, Http404
+from django.http import HttpResponseBadRequest
 from django.utils import timezone
 from datetime import datetime, date
 from django.contrib import messages
 
+
+@login_required
+def homepage(request):
+    return render(request, 'home.html')
 
 @login_required
 def liste_projets(request):
@@ -200,6 +204,7 @@ def modifier_statut_projet(request, projet_id):
         nouveau_statut = request.POST.get('statut')
         if projet.avancement == 100:
             projet.statut = 'Livré'
+            return redirect('liste_projets')
         if nouveau_statut in ['Planifié', 'En cours', 'En pause', 'Livré']:
             projet.statut = nouveau_statut
             projet.save()
@@ -253,6 +258,8 @@ def saisie_absence(request):
             type=type_absence,
             utilisateur=Utilisateur.objects.get(username=request.user.username)
         )
+        #for tache in Taches.objects.contains(Utilisateur.objects.get(id=request.user.id)):
+        #    tache.mettre_a_jour_statut_absence()
     return render(request, 'saisie_absence.html')
 
 
@@ -273,8 +280,9 @@ def supprimer_employe_tache(request, tache_id):
         utilisateur_id = request.POST.get('employe')
         if utilisateur_id is not None:  # Evite de supprimer un utilisateur qui n'existe pas
             utilisateur = get_object_or_404(Utilisateur, pk=utilisateur_id)
-        if tache.employes.exists():  # S'il y a bien des employes assignes à la tache, supprimer l'utilisateur
+        if tache.employes.contains(utilisateur):  # S'il y a bien des employes assignes à la tache, supprimer l'utilisateur
             tache.employes.remove(utilisateur)
         tache.check_employe()
         tache.save()
     return redirect('detail_projet', projet_id=tache.projet_id)
+
