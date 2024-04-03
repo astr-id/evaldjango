@@ -8,6 +8,14 @@
 <body>
 {% extends "base.html" %}
 {% block content %}
+
+    <div class="in-line" style="justify-content: flex-start; margin-left: 30px;">
+        <a href="{% url 'liste_projets' %}">
+            <i class="fas fa-chevron-left back-icon" title="Retour"></i>
+        </a>
+        <h2 class="margin">Saisie d'absence</h2>
+    </div>
+
     <!-- Conteneur message -->
     {% if messages %}
         <ul class="messages">
@@ -16,12 +24,6 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <div class="in-line" style="justify-content: flex-start; margin-left: 30px;">
-        <a href="{% url 'liste_projets' %}">
-            <i class="fas fa-chevron-left back-icon" title="Retour"></i>
-        </a>
-        <h2 class="margin">Saisie d'absence</h2>
-    </div>
 
     <form class="form" method="post">
         {% csrf_token %}

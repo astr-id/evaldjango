@@ -11,6 +11,7 @@ from django.contrib import messages
 def homepage(request):
     return render(request, 'home.html')
 
+
 @login_required
 def liste_projets(request):
     if request.method == 'POST':
@@ -252,13 +253,18 @@ def saisie_absence(request):
         fin = request.POST.get('fin')
         type_absence = request.POST.get('type')
 
+        date_debut = datetime.strptime(debut, '%Y-%m-%d').date()
+        if date_debut < datetime.now().date():
+            messages.error(request, "La date de début ne peut pas être antérieure à aujourd'hui.")
+            return render(request, 'saisie_absence.html')
+
         absence = Dates.objects.create(
             debut=debut,
             fin=fin,
             type=type_absence,
             utilisateur=Utilisateur.objects.get(username=request.user.username)
         )
-        #for tache in Taches.objects.contains(Utilisateur.objects.get(id=request.user.id)):
+        # for tache in Taches.objects.contains(Utilisateur.objects.get(id=request.user.id)):
         #    tache.mettre_a_jour_statut_absence()
         messages.success(request, "Absence enregistré.")
     return render(request, 'saisie_absence.html')
@@ -281,9 +287,9 @@ def supprimer_employe_tache(request, tache_id):
         utilisateur_id = request.POST.get('employe')
         if utilisateur_id is not None:  # Evite de supprimer un utilisateur qui n'existe pas
             utilisateur = get_object_or_404(Utilisateur, pk=utilisateur_id)
-        if tache.employes.contains(utilisateur):  # S'il y a bien des employes assignes à la tache, supprimer l'utilisateur
+        if tache.employes.contains(
+                utilisateur):  # S'il y a bien des employes assignes à la tache, supprimer l'utilisateur
             tache.employes.remove(utilisateur)
         tache.check_employe()
         tache.save()
     return redirect('detail_projet', projet_id=tache.projet_id)
-
