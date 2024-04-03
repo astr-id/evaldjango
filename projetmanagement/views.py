@@ -21,13 +21,16 @@ def liste_projets(request):
             date_fin = timezone.now().date()
             projet = Projets.objects.create(nom=nom_projet, avancement=0, statut='Planifié', date_fin=date_fin,
                                             date_debut=date_debut, responsable=request.user)
+            messages.success(request, "Le projet a été créé avec succès.")
             return redirect('liste_projets')
-    projets = {
-        'en cours': Projets.objects.filter(statut='En cours'),
-        'planifiés': Projets.objects.filter(statut='Planifié'),
-        'en pause': Projets.objects.filter(statut='En pause'),
-        'livrés': Projets.objects.filter(statut='Livré'),
-    }
+        else:
+            messages.error(request, "Le nom du projet est vide.")
+        projets = {
+            'en cours': Projets.objects.filter(statut='En cours'),
+            'planifiés': Projets.objects.filter(statut='Planifié'),
+            'en pause': Projets.objects.filter(statut='En pause'),
+            'livrés': Projets.objects.filter(statut='Livré'),
+        }
     return render(request, 'liste_projets.html', {'projets': projets})
 
 
@@ -54,7 +57,6 @@ def detail_projet(request, projet_id):
 @login_required
 def creer_tache(request, projet_id):
     projet = get_object_or_404(Projets, pk=projet_id)
-    error_message = None
     utilisateurs = Utilisateur.objects.all()
 
     if request.method == 'POST':
@@ -66,7 +68,7 @@ def creer_tache(request, projet_id):
         employes_ids = request.POST.getlist('assigne')
 
         if not all([libelle, description, priorite, date_debut_str, date_fin_str]):
-            error_message = "Merci de remplir tous les champs."
+            messages.error(request, "Merci de remplir tous les champs.")
         else:
             try:
                 date_debut = datetime.strptime(date_debut_str, "%Y-%m-%d").date()
@@ -74,7 +76,7 @@ def creer_tache(request, projet_id):
 
                 # Vérifie si la date de début est antérieure à la date du jour
                 if date_debut < date.today():
-                    error_message = "La date de début ne peut pas être antérieure à la date d'aujourd'hui."
+                    messages.error(request, "La date de début ne peut pas être antérieure à la date d'aujourd'hui.")
 
                 # Calculer la durée
                 duree = (date_fin - date_debut).days
@@ -108,9 +110,9 @@ def creer_tache(request, projet_id):
                 return redirect('detail_projet', projet_id=projet_id)
 
             except ValueError:
-                error_message = "Format de date invalide."
+                messages.error(request, "Format de date invalide.")
 
-    return render(request, 'create_tache.html', {'utilisateurs': utilisateurs, 'error_message': error_message})
+    return render(request, 'create_tache.html', {'utilisateurs': utilisateurs})
 
 
 @login_required
@@ -138,7 +140,6 @@ def supprimer_tache(request, tache_id):
 def creer_sous_tache(request, tache_id):
     tache_parente = get_object_or_404(Taches, pk=tache_id)
     sous_tache = None
-    error_message = None
     utilisateurs = Utilisateur.objects.all()
 
     if request.method == 'POST':
@@ -150,14 +151,15 @@ def creer_sous_tache(request, tache_id):
         employes_ids = request.POST.getlist('assigne')
 
         if not all([libelle, description, priorite, date_debut_str, date_fin_str]):
-            error_message = "Merci de remplir tous les champs."
+            messages.error(request, "Merci de remplir tous les champs.")
         else:
             try:
                 date_debut = datetime.strptime(date_debut_str, "%Y-%m-%d").date()
                 date_fin = datetime.strptime(date_fin_str, "%Y-%m-%d").date()
 
                 if date_debut < tache_parente.date_debut or date_fin > tache_parente.date_fin:
-                    error_message = "Les dates de la sous-tâche doivent être comprises dans celles de la tâche parente."
+                    messages.error(request,
+                                   "Les dates de la sous-tâche doivent être comprises dans celles de la tâche parente.")
                 else:
                     # Calcul la durée
                     duree = (date_fin - date_debut).days
@@ -184,10 +186,10 @@ def creer_sous_tache(request, tache_id):
                     return redirect('detail_projet', projet_id=tache_parente.projet_id)
 
             except ValueError:
-                error_message = "Format de date invalide."
+                messages.error(request, "Format de date invalide.")
 
     return render(request, 'create_tache.html',
-                  {'utilisateurs': utilisateurs, 'sous_tache': sous_tache, 'error_message': error_message})
+                  {'utilisateurs': utilisateurs, 'sous_tache': sous_tache})
 
 
 @login_required
