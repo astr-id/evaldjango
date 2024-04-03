@@ -28,7 +28,7 @@ def create_projects():
         Projets(id_projet=2, nom="Project 2", avancement=10.2, statut="En cours",  date_debut="2024-03-15", date_fin="2024-04-04",  responsable_id=1),
         Projets(id_projet=3, nom="Project 3", avancement=50.0, statut="Réalisée", date_debut="2024-01-01", date_fin="2024-01-16", responsable_id=1),
         Projets(id_projet=4, nom="Project 4", avancement=0, statut="En pause", responsable_id=1 , date_debut="2024-04-01", date_fin="2024-04-05",),
-        Projets(id_projet=5, nom="Project 5", avancement=75.3, statut="Livré", responsable_id=1, date_debut="2024-02-15", date_fin="2024-03-16", )
+        Projets(id_projet=5, nom="Project 5", avancement=100, statut="Livré", responsable_id=1, date_debut="2024-02-15", date_fin="2024-03-16", )
     ]
     Projets.objects.bulk_create(projects_data)
 
@@ -43,7 +43,7 @@ def create_tasks():
                priorite=3, statut="Réalisée", date_debut="2024-01-01", date_fin="2024-01-16", projet_id=3, gestionnaire_id=2),
         Taches(id_tache=4,libelle="Task 4", description="Description for Task 4", niveau_profondeur=1, duree=5, avancement=0,
                priorite=2, statut="En pause", date_debut="2024-04-01", date_fin="2024-04-05", projet_id=4, gestionnaire_id=2),
-        Taches(id_tache=5,libelle="Task 5", description="Description for Task 5", niveau_profondeur=1, duree=30, avancement=75.3,
+        Taches(id_tache=5,libelle="Task 5", description="Description for Task 5", niveau_profondeur=1, duree=30, avancement=100,
                priorite=1, statut="Validée", date_debut="2024-02-15", date_fin="2024-03-16", projet_id=5, gestionnaire_id=2)
     ]
     Taches.objects.bulk_create(tasks_data)

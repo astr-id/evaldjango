@@ -8,11 +8,6 @@ from django.contrib import messages
 
 
 @login_required
-def homepage(request):
-    return render(request, 'home.html')
-
-
-@login_required
 def liste_projets(request):
     if request.method == 'POST':
         nom_projet = request.POST.get('nom_projet', '')
@@ -270,7 +265,7 @@ def saisie_absence(request):
             if tache.employes.contains(request.user):
                 tache.mettre_a_jour_statut_absence()
         messages.success(request, "Absence enregistré.")
-    return redirect('liste_projets')
+    return render(request, 'saisie_absence.html')
 
 
 @login_required
