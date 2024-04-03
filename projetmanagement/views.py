@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Projets, Taches, Utilisateur, Dates
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, Http404
 from django.utils import timezone
 from datetime import datetime, date
 from django.contrib import messages
@@ -189,6 +189,7 @@ def supprimer_projet(request, projet_id):
     messages.success(request, "Le projet a été supprimé avec succès.")
     return redirect('liste_projets')
 
+@login_required
 def modifier_statut_projet(request, projet_id):
     if request.method == 'POST':
         projet = get_object_or_404(Projets, pk=projet_id)
@@ -226,6 +227,8 @@ def modifier_statut_tache(request, tache_id):
             tache.statut = nouveau_statut
             if tache.avancement == 100:
                 tache.statut = 'Réalisée'
+            if tache.check_employe():
+                messages.error(request, "Impossible de passer la tache en cours sans employés")
             tache.save()
             tache.projet.calculer_avancement_moyen()
             tache.projet.verifier_statut_projet()
@@ -246,7 +249,6 @@ def saisie_absence(request):
             type=type_absence,
             utilisateur=Utilisateur.objects.get(username=request.user.username)
         )
-
     return render(request, 'saisie_absence.html')
 
 
@@ -265,6 +267,10 @@ def supprimer_employe_tache(request, tache_id):
     if request.method == 'POST':
         tache = get_object_or_404(Taches, pk=tache_id)
         utilisateur_id = request.POST.get('employe')
-        utilisateur = get_object_or_404(Utilisateur, pk=utilisateur_id)
-        tache.employes.remove(utilisateur)
+        if utilisateur_id is not None: #Evite de supprimer un utilisateur qui n'existe pas
+            utilisateur = get_object_or_404(Utilisateur, pk=utilisateur_id)
+        if tache.employes.exists():#S'il y a bien des employes assignes à la tache, supprimer l'utilisateur
+            tache.employes.remove(utilisateur)
+        tache.check_employe()
+        tache.save()
     return redirect('detail_projet', projet_id=tache.projet_id)

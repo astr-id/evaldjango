@@ -142,3 +142,11 @@ class Taches(models.Model):
         for sous_tache in self.sous_taches.all():
             sous_tache.statut = 'En pause'
             sous_tache.save()
+
+    #  Check s'il n'y a plus d'employes et que la tache est en cours, la mettre en pause
+    def check_employe(self):
+        print(self.employes)
+        if not self.employes.exists() and self.statut == 'En cours':
+            self.statut = 'En pause'
+            return True
+        return False
