@@ -6,7 +6,9 @@ Une fois l’archive téléchargée, dézipez-la à l’endroit de votre choix s
 Démarrez la machine virtuelle.
 Une fois celle-ci en route (vous demandant un mot de passe),nous allons maintenant copier le dossier de votre machine hôte vers la machine virtuelle.
 Pour ce faire sur votre machine hôte, saisissez cette commande en remplaçant “monchemin” par le chemin où vous avez précédemment extrait l’archive : 
+
 scp -r monchemin/evaldjango-master osboxes@192.168.56.12:~/
+
 Saisissez le mot de passe de la machine virtuelle : osboxes.org si non modifié.
 Vous devriez voir une liste de tous les fichiers qui ont été copiés, comme ceci.
 
