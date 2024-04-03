@@ -10,11 +10,13 @@
 
     <h2 class="margin">Créer une nouvelle tâche</h2>
 
-    <!-- Conteneur message d'erreur -->
-    {% if error_message %}
-        <div class="alert alert-danger" role="alert">
-            {{ error_message }}
-        </div>
+    <!-- Conteneur message -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
     {% endif %}
 
     <!-- Conteneur formulaire-->

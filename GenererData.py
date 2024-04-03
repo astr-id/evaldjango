@@ -24,11 +24,11 @@ def create_users():
 # Function to create random projects
 def create_projects():
     projects_data = [
-        Projets(id_projet=1, nom="Project 1", avancement=20.5, statut="En cours", date_debut="2024-04-01", date_fin="2024-04-10", responsable_id=1),
-        Projets(id_projet=2, nom="Project 2", avancement=10.2, statut="Planifié",  date_debut="2024-03-15", date_fin="2024-04-04",  responsable_id=1),
-        Projets(id_projet=3, nom="Project 3", avancement=50.0, statut="Livré", date_debut="2024-01-01", date_fin="2024-01-16", responsable_id=1),
+        Projets(id_projet=1, nom="Project 1", avancement=20.5, statut="Planifié", date_debut="2024-04-01", date_fin="2024-04-10", responsable_id=1),
+        Projets(id_projet=2, nom="Project 2", avancement=10.2, statut="En cours",  date_debut="2024-03-15", date_fin="2024-04-04",  responsable_id=1),
+        Projets(id_projet=3, nom="Project 3", avancement=50.0, statut="Réalisée", date_debut="2024-01-01", date_fin="2024-01-16", responsable_id=1),
         Projets(id_projet=4, nom="Project 4", avancement=0, statut="En pause", responsable_id=1 , date_debut="2024-04-01", date_fin="2024-04-05",),
-        Projets(id_projet=5, nom="Project 5", avancement=75.3, statut="En cours", responsable_id=1, date_debut="2024-02-15", date_fin="2024-03-16", )
+        Projets(id_projet=5, nom="Project 5", avancement=75.3, statut="Livré", responsable_id=1, date_debut="2024-02-15", date_fin="2024-03-16", )
     ]
     Projets.objects.bulk_create(projects_data)
 
