@@ -1,6 +1,6 @@
 
 Avant toute chose vous devez avoir le protocole de communication sécurisé SSH d’installer sur votre ordinateur. Si ce n’est pas le cas, vous devez l’installer suivant votre distribution. Il vous faudra aussi avoir installé Python sur votre machine virtuelle.
-Afin de pouvoir déployer notre application de gestion de projet, il convient de télécharger les fichiers correspondants sous forme de d’archive .zip sur GitHub à l’adresse suivante (commit eaa057a) : lien 
+Afin de pouvoir déployer notre application de gestion de projet, il convient de télécharger les fichiers correspondants sous forme de d’archive .zip sur GitHub
 
 Une fois l’archive téléchargée, dézipez-la à l’endroit de votre choix sur le disque dur. Notez bien cet emplacement, il vous resservira plus tard.
 Démarrez la machine virtuelle.
