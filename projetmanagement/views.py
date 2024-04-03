@@ -260,6 +260,7 @@ def saisie_absence(request):
         )
         #for tache in Taches.objects.contains(Utilisateur.objects.get(id=request.user.id)):
         #    tache.mettre_a_jour_statut_absence()
+        messages.success(request, "Absence enregistré.")
     return render(request, 'saisie_absence.html')
 
 
