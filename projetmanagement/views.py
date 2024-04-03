@@ -26,7 +26,7 @@ def liste_projets(request):
         'en pause': Projets.objects.filter(statut='En pause'),
         'livrés': Projets.objects.filter(statut='Livré'),
     }
-    return render(request, 'liste_projets.html', {'projets': projets})
+    return render(request, 'liste_projets.html', {'projets': projets,})
 
 
 @login_required
@@ -250,7 +250,16 @@ def saisie_absence(request):
         fin = request.POST.get('fin')
         type_absence = request.POST.get('type')
 
-        date_debut = datetime.strptime(debut, '%Y-%m-%d').date()
+        if not all([debut, fin, type_absence]):
+            messages.error(request, "Merci de remplir tous les champs.")
+
+        try:
+            date_debut = datetime.strptime(debut, '%Y-%m-%d').date()
+            date_fin = datetime.strptime(fin, '%Y-%m-%d').date()
+        except ValueError:
+            messages.error(request, "Format de date invalide.")
+            return render(request, 'saisie_absence.html')
+
         if date_debut < datetime.now().date():
             messages.error(request, "La date de début ne peut pas être antérieure à aujourd'hui.")
             return render(request, 'saisie_absence.html')
