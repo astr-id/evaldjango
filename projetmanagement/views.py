@@ -125,11 +125,11 @@ def supprimer_tache(request, tache_id):
         else:
             projet.date_debut = timezone.now()
             projet.date_fin = timezone.now()
+            projet.statut = 'En pause'
         projet.save()
 
         messages.success(request, "La tâche a été supprimée avec succès.")
         return redirect('detail_projet', projet_id=projet.id_projet)
-
 
 @login_required
 def creer_sous_tache(request, tache_id):
