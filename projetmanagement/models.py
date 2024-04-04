@@ -96,7 +96,7 @@ class Taches(models.Model):
     id_tache = models.AutoField(primary_key=True)
     libelle = models.CharField(max_length=255)
     description = models.TextField()
-    niveau_profondeur = models.SmallIntegerField(default=1)
+    niveau_profondeur = models.SmallIntegerField(default=0)
     duree = models.IntegerField()
     avancement = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     PRIORITE_CHOICES = (
