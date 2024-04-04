@@ -125,11 +125,20 @@ class Taches(models.Model):
     def save(self, *args, **kwargs):
         if self.tache_parent and self.tache_parent.niveau_profondeur >= 3:
             raise ValueError("Impossible d'ajouter une sous-tâche à une tâche de niveau de profondeur supérieur à 2.")
-        if self.tache_parent:
+        if self.niveau_profondeur is None and self.tache_parent:
             self.niveau_profondeur = self.tache_parent.niveau_profondeur + 1
         super().save(*args, **kwargs)
         self.calculer_avancement()
-        self.mettre_a_jour_statut_parent()
+        self.mettre_a_jour_statut_enfant()
+
+    def save_sous_tache(self, *args, **kwargs):
+        if self.tache_parent and self.tache_parent.niveau_profondeur >= 3:
+            raise ValueError("Impossible d'ajouter une sous-tâche à une tâche de niveau de profondeur supérieur à 2.")
+        if self.niveau_profondeur is None and self.tache_parent:
+            self.niveau_profondeur = self.tache_parent.niveau_profondeur + 1
+
+        super().save(*args, **kwargs)
+        self.calculer_avancement()
 
     def __str__(self):
         return self.libelle
@@ -145,6 +154,8 @@ class Taches(models.Model):
         if self.tache_parent:
             self.tache_parent.calculer_avancement()
 
+
+
     def mettre_a_jour_statut_parent(self):
         if self.tache_parent:
             statuts_sous_taches = set(sous_tache.statut for sous_tache in self.tache_parent.sous_taches.all())
@@ -157,13 +168,12 @@ class Taches(models.Model):
                 self.tache_parent.statut = 'Validée'
             self.tache_parent.save()
 
-            if self.tache_parent and self.tache_parent.statut == 'En pause':
-                self.mettre_a_jour_statut_enfant()
-
     def mettre_a_jour_statut_enfant(self):
-        for sous_tache in self.sous_taches.all():
-            sous_tache.statut = 'En pause'
-            sous_tache.save()
+        if self.statut == 'En pause' and self.sous_taches.exists() :
+            for sous_tache in self.sous_taches.all():
+                sous_tache.statut = 'En pause'
+                sous_tache.save()
+
 
 
     #  Check s'il n'y a plus d'employes et que la tache est en cours, la mettre en pause

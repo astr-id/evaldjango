@@ -224,6 +224,16 @@ def modifier_avancement_tache(request, tache_id):
             return redirect('detail_projet', projet_id=tache.projet_id)
     return HttpResponseBadRequest("Invalid request test")
 
+#Permet d'autoriser ou non la modification d'une tache en fonction
+#de la présence d'une tâche parente
+def check_statut(request, tache, nouveau_statut):
+    if tache.tache_parent and tache.tache_parent.statut != "En pause":
+        tache.statut = nouveau_statut
+    elif not tache.tache_parent:
+        tache.statut = nouveau_statut
+    else:
+        messages.error(request, "Impossible de modifier le statut de la tache tant que "
+                                "la tache parente est en pause")
 
 @login_required
 def modifier_statut_tache(request, tache_id):
@@ -231,7 +241,7 @@ def modifier_statut_tache(request, tache_id):
         tache = get_object_or_404(Taches, pk=tache_id)
         nouveau_statut = request.POST.get('statut')
         if nouveau_statut in ['Planifiée', 'En cours', 'Réalisée', 'En pause', 'Validée']:
-            tache.statut = nouveau_statut
+            check_statut(request, tache, nouveau_statut)
             if tache.avancement == 100:
                 tache.statut = 'Réalisée'
             if tache.check_employe():
