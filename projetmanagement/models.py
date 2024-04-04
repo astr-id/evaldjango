@@ -131,15 +131,6 @@ class Taches(models.Model):
         self.calculer_avancement()
         self.mettre_a_jour_statut_enfant()
 
-    def save_sous_tache(self, *args, **kwargs):
-        if self.tache_parent and self.tache_parent.niveau_profondeur >= 3:
-            raise ValueError("Impossible d'ajouter une sous-tâche à une tâche de niveau de profondeur supérieur à 2.")
-        if self.niveau_profondeur is None and self.tache_parent:
-            self.niveau_profondeur = self.tache_parent.niveau_profondeur + 1
-
-        super().save(*args, **kwargs)
-        self.calculer_avancement()
-
     def __str__(self):
         return self.libelle
 
@@ -154,19 +145,6 @@ class Taches(models.Model):
         if self.tache_parent:
             self.tache_parent.calculer_avancement()
 
-
-
-    def mettre_a_jour_statut_parent(self):
-        if self.tache_parent:
-            statuts_sous_taches = set(sous_tache.statut for sous_tache in self.tache_parent.sous_taches.all())
-
-            if 'En cours' in statuts_sous_taches:
-                self.tache_parent.statut = 'En cours'
-            elif 'Réalisée' in statuts_sous_taches and len(statuts_sous_taches) == 1:
-                self.tache_parent.statut = 'Réalisée'
-            elif 'Validée' in statuts_sous_taches and len(statuts_sous_taches) == 1:
-                self.tache_parent.statut = 'Validée'
-            self.tache_parent.save()
 
     def mettre_a_jour_statut_enfant(self):
         if self.statut == 'En pause' and self.sous_taches.exists() :
@@ -201,3 +179,15 @@ class Taches(models.Model):
             self.statut = self.statut
 
         self.save()
+
+    # Permet d'autoriser ou non la modification d'une tache en fonction
+    # de la présence d'une tâche parente
+    def check_statut(self, nouveau_statut):
+        if self.tache_parent and self.tache_parent.statut != "En pause":
+            self.statut = nouveau_statut
+            return
+        elif not self.tache_parent:
+            self.statut = nouveau_statut
+            return
+        else:
+            return "Impossible de modifier le statut de la tache tant que la tache parente est en pause"
