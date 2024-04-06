@@ -43,7 +43,13 @@
                                 <h3>{{ projet.nom }}</h3>
                                 <!-- Si l'utilisateur est Responsable, il pourra supprimer le projet -->
                                 {% if user.estResponsable == True %}
-                                    <form action="{% url 'supprimer_projet' projet.id_projet %}" method="post">
+                                    <script>
+                                        function confirmDelete() {
+                                            return confirm("Voulez vous vraiment supprimer ce projet ?");
+                                        }
+                                    </script>
+                                    <form action="{% url 'supprimer_projet' projet.id_projet %}" method="post"
+                                          onsubmit="return confirmDelete();">
                                         {% csrf_token %}
                                         <button type="submit"><i class="fas fa-trash-alt trash-icon"></i></button>
                                     </form>

@@ -55,8 +55,14 @@
                             <li class="tache">
 
                                 <div class="in-line">
+                                    <script>
+                                        function confirmDelete() {
+                                            return confirm("Voulez vous vraiment supprimer cette tâche (et le cas échéant sa sous-tâche) ?");
+                                        }
+                                    </script>
                                     <h3>{{ tache.libelle }}</h3>
-                                    <form method="post" action="{% url 'supprimer_tache' tache_id=tache.id_tache %}">
+                                    <form method="post" action="{% url 'supprimer_tache' tache_id=tache.id_tache %}"
+                                          onsubmit="return confirmDelete();">
                                         {% csrf_token %}
                                         <button type="submit"><i class="fas fa-trash-alt trash-icon"></i></button>
                                     </form>
@@ -87,7 +93,8 @@
                                     <form method="post"
                                           action="{% url 'modifier_avancement_tache' tache_id=tache.id_tache %}">
                                         {% csrf_token %}
-                                        <input type="number" class="tache-input" name="avancement" min="0" max="100" required>
+                                        <input type="number" class="tache-input" name="avancement" min="0" max="100"
+                                               required>
                                         <button type="submit" class="btn modifier-btn">
                                             <i class="fas fa-pen" style="margin-right: 0px" ;></i>
                                         </button>
@@ -109,8 +116,9 @@
                                         </button>
                                     </form>
 
-                                     <!-- boutons pour ajouter/supprimer des employés de la tache -->
-                                    <form method="post" action="{% url 'ajouter_employe_tache' tache_id=tache.id_tache %}">
+                                    <!-- boutons pour ajouter/supprimer des employés de la tache -->
+                                    <form method="post"
+                                          action="{% url 'ajouter_employe_tache' tache_id=tache.id_tache %}">
                                         {% csrf_token %}
                                         <select name="employe" class="tache-input">
                                             {% for utilisateur in utilisateurs %}
@@ -122,7 +130,8 @@
                                         </button>
                                     </form>
 
-                                    <form method="post" action="{% url 'supprimer_employe_tache' tache_id=tache.id_tache %}">
+                                    <form method="post"
+                                          action="{% url 'supprimer_employe_tache' tache_id=tache.id_tache %}">
                                         {% csrf_token %}
                                         <select name="employe" class="tache-input">
                                             {% for utilisateur in tache.employes.all %}
