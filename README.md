@@ -18,7 +18,9 @@ Et ensuite relancer le serveur pour utiliser l'adresse par défaut : ```python3 
 3 utilisateurs avec chacun un rôle différent sont enregistrés : 
 
 Astrid avec le rôle de responsable.
+
 Audrey avec le rôle de gestionnaire.
+
 Gaëtan avec le rôle d’employé.
 
 Pour ces 3 utilisateurs, le mot de passe est le même, à savoir : password123
