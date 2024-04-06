@@ -1,4 +1,7 @@
-Pour télécharger ce projet, vous devez disposer d'une machine virtuelle connectée à internet. 
+Pour télécharger ce projet, vous devez disposer d'une machine virtuelle connectée à internet et de l'outil de versionning git.
+
+Si vous n'avez pas git d'installé, vous pouvez saisir cette commande : ```sudo apt install git```
+
 Depuis votre machine virtuelle, entrez la commande suivante : 
 
 ```git clone https://github.com/astr-id/evaldjango.git```
@@ -10,7 +13,7 @@ Lancez ensuite le script d'automatisation de l'installation, de génération d'e
 Vous devriez avoir le serveur qui tourne à la fin de l'exécution du script. Pour s'y connecter, rendez vous à l’adresse suivante et appréciez pleinement les fonctionnalités de l’application de gestion de projet : http://192.168.56.12:8000
 
 Si vous ne parveniez pas à vous y connecter, vous pouvez toujours arrêter le serveur via la commande : ```Ctl + C```
-Et ensuite relancer le serveur : ```python3 manage.py```
+Et ensuite relancer le serveur pour utiliser l'adresse par défaut : ```python3 manage.py runserver```
 
 3 utilisateurs avec chacun un rôle différent sont enregistrés : 
 
